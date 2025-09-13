@@ -10,7 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // Load login.fxml from resources/habittracker/
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/habittracker/login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/habittracker/signup.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 400, 300);
 
         // Attach CSS from resources/habittracker/style.css

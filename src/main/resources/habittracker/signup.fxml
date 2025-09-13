@@ -3,11 +3,31 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.habittracker.controllers.SignupController">
+            fx:controller="org.habittracker.controllers.SignupController"
+            prefWidth="400" prefHeight="300">
+
     <center>
-        <VBox>
-            <Label text="Welcome to Habit Tracker " styleClass="title"/>
-            <TextField fx:id="usernameField" promptText="Enter Username "/>
-            <PasswordField fx:id="passwordField" promptText="Enter the Password ">
+        <VBox spacing="10" alignment="CENTER" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Welcome to Habit Tracker" styleClass="title"/>
+
+            <TextField fx:id="usernameField" promptText="Enter Username"/>
+
+            <PasswordField fx:id="passwordField" promptText="Enter Password"/>
+
+            <!-- Optional confirm password -->
+            <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password"/>
+
+            <!-- Label for showing errors/success messages -->
+            <Label fx:id="messageLabel" textFill="red"/>
+
+            <!-- Signup button -->
+            <Button text="Sign Up" onAction="#handleSignup"/>
+        </VBox>
+    </center>
+</BorderPane>

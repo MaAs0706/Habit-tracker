@@ -9,7 +9,7 @@ import org.habittracker.services.AuthService;
 public class SignupController {
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField; // optional, for confirm
+    @FXML private PasswordField confirmPasswordField;
     @FXML private Label messageLabel;
 
     private final AuthService authService = new AuthService();
