@@ -3,31 +3,35 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@signup.css"
             fx:controller="org.habittracker.controllers.SignupController"
-            prefWidth="400" prefHeight="300">
+            prefWidth="400" prefHeight="350">
 
     <center>
-        <VBox spacing="10" alignment="CENTER" BorderPane.alignment="CENTER">
+        <VBox spacing="15" alignment="CENTER" styleClass="signup-container" BorderPane.alignment="CENTER">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="30" right="30" bottom="30" left="30"/>
             </padding>
 
-            <Label text="Welcome to Habit Tracker" styleClass="title"/>
+            <!-- Title -->
+            <Label text="Create Your Account" styleClass="title"/>
 
-            <TextField fx:id="usernameField" promptText="Enter Username"/>
+            <!-- Input Fields -->
+            <TextField fx:id="usernameField" promptText="Enter Username" styleClass="input-field"/>
+            <PasswordField fx:id="passwordField" promptText="Enter Password" styleClass="input-field"/>
+            <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" styleClass="input-field"/>
 
-            <PasswordField fx:id="passwordField" promptText="Enter Password"/>
-
-            <!-- Optional confirm password -->
-            <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password"/>
-
-            <!-- Label for showing errors/success messages -->
-            <Label fx:id="messageLabel" textFill="red"/>
+            <!-- Error or Success message -->
+            <Label fx:id="messageLabel" styleClass="message-label"/>
 
             <!-- Signup button -->
-            <Button text="Sign Up" onAction="#handleSignup"/>
+            <Button text="Sign Up" onAction="#handleSignup" styleClass="primary-btn"/>
+
+
+
         </VBox>
     </center>
 </BorderPane>

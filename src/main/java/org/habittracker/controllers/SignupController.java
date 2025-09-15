@@ -39,4 +39,5 @@ public class SignupController {
             messageLabel.setText("❌ Signup failed. Username may already exist.");
         }
     }
+
 }
