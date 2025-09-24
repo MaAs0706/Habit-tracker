@@ -1,10 +1,16 @@
 package org.habittracker.controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import org.habittracker.services.AuthService;
+
+import java.io.IOException;
 
 public class SignupController {
     @FXML private TextField usernameField;
@@ -39,5 +45,7 @@ public class SignupController {
             messageLabel.setText("❌ Signup failed. Username may already exist.");
         }
     }
+
+
 
 }
