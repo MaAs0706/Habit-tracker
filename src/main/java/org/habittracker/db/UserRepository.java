@@ -36,7 +36,7 @@ public class UserRepository {
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                // Return user with stored (hashed) password
+                // Return user with stored plain  text password
                 return new User(
                         rs.getString("username"),
                         rs.getString("password")
