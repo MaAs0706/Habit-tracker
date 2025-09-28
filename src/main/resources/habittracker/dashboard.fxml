@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.habittracker.controllers.DashboardController">
+
+    <top>
+        <HBox spacing="10" alignment="CENTER" BorderPane.alignment="CENTER">
+            <children>
+                <Button text="Add Habit" fx:id="addBtn"/>
+                <Button text="Edit Habit" fx:id="editBtn"/>
+                <Button text="Delete Habit" fx:id="deleteBtn"/>
+            </children>
+            <padding>
+                <Insets top="10" bottom="10" left="10" right="10"/>
+            </padding>
+        </HBox>
+    </top>
+
+    <left>
+            <VBox spacing="10" BorderPane.alignment="CENTER" >
+                    <children>
+                            <Label text="Your Habits" style="-fx-font-weight:bold;"/>
+                            <ListView fx:id="HabitList" prefWidth="200"/>
+                    </children>
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+            </VBox>
+    </left>
+</BorderPane>

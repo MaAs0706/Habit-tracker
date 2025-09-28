@@ -40,7 +40,7 @@ public class SignupController {
 
         if (success) {
             messageLabel.setText("✅ User registered successfully!");
-            // TODO: Switch to login screen after signup
+
         } else {
             messageLabel.setText("❌ Signup failed. Username may already exist.");
         }

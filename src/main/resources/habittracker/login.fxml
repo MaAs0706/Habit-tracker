@@ -5,6 +5,7 @@
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@login.css"
             fx:controller="org.habittracker.controllers.LoginController">
 
     <center>
