@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.BarChart?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.habittracker.controllers.DashboardController">
@@ -11,9 +10,9 @@
     <top>
         <HBox spacing="10" alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
-                <Button text="Add Habit" fx:id="addBtn"/>
-                <Button text="Edit Habit" fx:id="editBtn"/>
-                <Button text="Delete Habit" fx:id="deleteBtn"/>
+                <Button text="Add Habit" fx:id="addBtn" onAction="#handleAdd"/>
+                <Button text="Edit Habit" fx:id="editBtn" onAction="#handleEdit"/>
+                <Button text="Delete Habit" fx:id="deleteBtn" onAction="#handleDelete"/>
             </children>
             <padding>
                 <Insets top="10" bottom="10" left="10" right="10"/>
@@ -22,14 +21,34 @@
     </top>
 
     <left>
-            <VBox spacing="10" BorderPane.alignment="CENTER" >
-                    <children>
-                            <Label text="Your Habits" style="-fx-font-weight:bold;"/>
-                            <ListView fx:id="HabitList" prefWidth="200"/>
-                    </children>
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
-            </VBox>
+        <VBox spacing="10">
+            <children>
+                <Label text="Your Habits" style="-fx-font-weight:bold;"/>
+                <ListView fx:id="HabitList" prefWidth="200"/>
+            </children>
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </VBox>
     </left>
+
+    <center>
+        <GridPane fx:id="calendarGrid" hgap="10" vgap="10" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="20" bottom="20" left="20" right="20"/>
+            </padding>
+        </GridPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="statusLabel" text="Today's Progress: 0/0 habits completed"/>
+            </children>
+            <padding>
+                <Insets top="10" bottom="10" left="10" right="10"/>
+            </padding>
+        </HBox>
+    </bottom>
+
 </BorderPane>
