@@ -13,6 +13,7 @@
                 <Button text="Add Habit" fx:id="addBtn" onAction="#handleAdd"/>
                 <Button text="Edit Habit" fx:id="editBtn" onAction="#handleEdit"/>
                 <Button text="Delete Habit" fx:id="deleteBtn" onAction="#handleDelete"/>
+                <Button text="Analytics" fx:id="analyticsBtn" onAction="#handleAnalytics" />
             </children>
             <padding>
                 <Insets top="10" bottom="10" left="10" right="10"/>

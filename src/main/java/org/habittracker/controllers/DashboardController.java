@@ -115,4 +115,10 @@ public class DashboardController {
         System.out.println("Delete habit clicked");
         // TODO: Remove selected habit from list and DB
     }
+
+    @FXML
+    private void handleAnalytics(){
+        System.out.println("Transfer to Analytics");
+        //TODO: transfer the user to the analytics page
+    }
 }
