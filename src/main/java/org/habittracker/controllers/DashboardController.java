@@ -100,6 +100,7 @@ public class DashboardController {
         Text dayText = new Text(String.valueOf(day));
 
         StackPane cell = new StackPane(rect, dayText);
+        cell.getStyleClass().add("day-cell");
 
         LocalDate cellDate = LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), day);
 
