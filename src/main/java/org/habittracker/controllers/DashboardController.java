@@ -4,16 +4,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DashboardController {
 
@@ -35,12 +38,11 @@ public class DashboardController {
     @FXML
     private Label statusLabel;
 
-    private List<String> habits;
+    private List<String> habits = new ArrayList<>();
 
     @FXML
     public void initialize() {
-        // Sample habits
-        habits = new ArrayList<>();
+        // Load habits here, for now sample data
         habits.add("Exercise");
         habits.add("Read Book");
         habits.add("Meditate");
@@ -110,8 +112,13 @@ public class DashboardController {
         }
 
         cell.setOnMouseClicked(e -> {
+
+            System.out.println("Clicked day: " + day);
+            // TODO: Show habits completed for this day
+
             System.out.println("Clicked day: " + cellDate);
             // Later: Show completed habits for this date
+
         });
 
         return cell;
@@ -120,25 +127,88 @@ public class DashboardController {
 
     @FXML
     private void handleAdd() {
-        System.out.println("Add habit clicked");
-        // TODO: Open add habit dialog
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Add Habit");
+        dialog.setHeaderText("Add a new habit");
+        dialog.setContentText("Enter habit name:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(habit -> {
+            String trimmed = habit.trim();
+            if (!trimmed.isEmpty() && !habits.contains(trimmed)) {
+                // TODO: Add habit to DB here
+
+                habits.add(trimmed);
+                HabitList.getItems().add(trimmed);
+                updateStatus();
+                System.out.println("Added habit: " + trimmed);
+            }
+        });
     }
 
     @FXML
     private void handleEdit() {
-        System.out.println("Edit habit clicked");
-        // TODO: Open edit habit dialog
+        if (habits.isEmpty()) {
+            System.out.println("No habits to edit");
+            return;
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(habits.get(0), habits);
+        dialog.setTitle("Edit Habit");
+        dialog.setHeaderText("Select habit to edit");
+        dialog.setContentText("Choose habit:");
+
+        Optional<String> selectedHabit = dialog.showAndWait();
+
+        selectedHabit.ifPresent(habitToEdit -> {
+            TextInputDialog editDialog = new TextInputDialog(habitToEdit);
+            editDialog.setTitle("Edit Habit");
+            editDialog.setHeaderText("Editing habit: " + habitToEdit);
+            editDialog.setContentText("Enter new habit name:");
+
+            Optional<String> newName = editDialog.showAndWait();
+            newName.ifPresent(newHabitName -> {
+                String trimmedNewName = newHabitName.trim();
+                if (!trimmedNewName.isEmpty() && !habits.contains(trimmedNewName)) {
+                    // TODO: Update habit in DB here
+
+                    int index = habits.indexOf(habitToEdit);
+                    habits.set(index, trimmedNewName);
+                    HabitList.getItems().set(index, trimmedNewName);
+                    updateStatus();
+                    System.out.println("Edited habit: " + habitToEdit + " to " + trimmedNewName);
+                }
+            });
+        });
     }
 
     @FXML
     private void handleDelete() {
-        System.out.println("Delete habit clicked");
-        // TODO: Remove selected habit from list and DB
+        if (habits.isEmpty()) {
+            System.out.println("No habits to delete");
+            return;
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(habits.get(0), habits);
+        dialog.setTitle("Delete Habit");
+        dialog.setHeaderText("Select habit to delete");
+        dialog.setContentText("Choose habit:");
+
+        Optional<String> habitToDelete = dialog.showAndWait();
+        habitToDelete.ifPresent(habit -> {
+            // TODO: Delete habit in DB here
+
+            habits.remove(habit);
+            HabitList.getItems().remove(habit);
+            updateStatus();
+            System.out.println("Deleted habit: " + habit);
+        });
     }
 
     @FXML
-    private void handleAnalytics(){
+    private void handleAnalytics() {
         System.out.println("Transfer to Analytics");
-        //TODO: transfer the user to the analytics page
+        // TODO: Implement analytics page transfer
     }
+
 }
