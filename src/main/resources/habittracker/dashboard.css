@@ -1,0 +1,99 @@
+/* ----- Root styling ----- */
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #f8fafc;
+    -fx-padding: 15;
+}
+
+/* ----- Top bar ----- */
+.hbox {
+    -fx-background-color: #ffffff;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.button {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 6 14;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #357ABD;
+}
+
+/* ----- Sidebar ----- */
+.vbox {
+    -fx-background-color: #ffffff;
+    -fx-padding: 12;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 1 0 0;
+    -fx-background-radius: 8;
+}
+
+.label {
+    -fx-font-size: 14px;
+}
+
+/* Habit list */
+.list-view {
+    -fx-background-color: #fdfdfd;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+/* ----- Calendar ----- */
+.grid-pane {
+    -fx-hgap: 8;
+    -fx-vgap: 8;
+    -fx-padding: 20;
+    -fx-alignment: center;
+}
+
+/* Day cells */
+.stack-pane {
+    -fx-background-color: #f1f3f6;
+    -fx-background-radius: 10;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 10;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-padding: 6;
+    -fx-pref-width: 80;
+    -fx-pref-height: 60;
+}
+
+.stack-pane:hover {
+    -fx-background-color: #e3e8ef;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0.3, 0, 2);
+}
+
+/* Today’s highlight */
+.today-cell {
+    -fx-background-color: #A3D9A5;
+    -fx-border-color: #4CAF50;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.4), 6, 0.3, 0, 2);
+}
+
+/* Weekday headers */
+.label {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+/* ----- Bottom bar ----- */
+#statusLabel {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+    -fx-padding: 6 20;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+}

@@ -66,38 +66,64 @@ public class DashboardController {
         YearMonth yearMonth = YearMonth.from(date);
         int daysInMonth = yearMonth.lengthOfMonth();
 
-        int row = 0;
-        int col = 0;
+        // Add day headers (Mon–Sun)
+        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        for (int i = 0; i < days.length; i++) {
+            Label lbl = new Label(days[i]);
+            lbl.setStyle("-fx-font-weight: bold;");
+            calendarGrid.add(lbl, i, 0); // row 0 = header row
+        }
+
+        // Position the first day of the month
+        LocalDate firstDay = yearMonth.atDay(1);
+        int startDayOfWeek = firstDay.getDayOfWeek().getValue(); // 1=Mon ... 7=Sun
+
+        int row = 1; // start from row 1 (row 0 used for headers)
+        int col = startDayOfWeek - 1; // align first day under correct weekday
 
         for (int day = 1; day <= daysInMonth; day++) {
-            StackPane dayCell = createDayCell(day);
+            StackPane dayCell = createDayCell(day, date);
+
             calendarGrid.add(dayCell, col, row);
 
             col++;
-            if (col > 6) { // 7 days a week
+            if (col > 6) { // wrap after Sunday
                 col = 0;
                 row++;
             }
         }
     }
 
-    private StackPane createDayCell(int day) {
+    private StackPane createDayCell(int day, LocalDate currentMonth) {
         Rectangle rect = new Rectangle(80, 60);
         rect.setFill(Color.LIGHTGRAY);
         rect.setStroke(Color.BLACK);
 
         Text dayText = new Text(String.valueOf(day));
 
-        StackPane cell = new StackPane();
-        cell.getChildren().addAll(rect, dayText);
+        StackPane cell = new StackPane(rect, dayText);
+        cell.getStyleClass().add("day-cell");
+
+        LocalDate cellDate = LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), day);
+
+        // Highlight today
+        if (cellDate.equals(LocalDate.now())) {
+            rect.setFill(Color.LIGHTGREEN);
+        }
 
         cell.setOnMouseClicked(e -> {
+
             System.out.println("Clicked day: " + day);
             // TODO: Show habits completed for this day
+
+            System.out.println("Clicked day: " + cellDate);
+            // Later: Show completed habits for this date
+
         });
 
         return cell;
     }
+
 
     @FXML
     private void handleAdd() {
