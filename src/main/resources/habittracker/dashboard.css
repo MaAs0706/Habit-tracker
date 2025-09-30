@@ -1,99 +1,78 @@
-/* ----- Root styling ----- */
+/* Root background */
 .root {
+    -fx-background-color: linear-gradient(to bottom right, #6a11cb, #2575fc);
     -fx-font-family: "Segoe UI", sans-serif;
-    -fx-background-color: #f8fafc;
-    -fx-padding: 15;
 }
 
-/* ----- Top bar ----- */
-.hbox {
-    -fx-background-color: #ffffff;
-    -fx-padding: 10;
-    -fx-spacing: 10;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 0 0 1 0;
-}
-
-.button {
-    -fx-background-color: #4a90e2;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 8;
-    -fx-padding: 6 14;
-    -fx-cursor: hand;
-}
-
-.button:hover {
-    -fx-background-color: #357ABD;
-}
-
-/* ----- Sidebar ----- */
-.vbox {
-    -fx-background-color: #ffffff;
-    -fx-padding: 12;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 0 1 0 0;
-    -fx-background-radius: 8;
-}
-
-.label {
-    -fx-font-size: 14px;
-}
-
-/* Habit list */
-.list-view {
-    -fx-background-color: #fdfdfd;
-    -fx-border-color: #dcdcdc;
-    -fx-border-radius: 6;
-    -fx-background-radius: 6;
-}
-
-/* ----- Calendar ----- */
-.grid-pane {
-    -fx-hgap: 8;
-    -fx-vgap: 8;
+/* Calendar root */
+.calendar-root {
+    -fx-background-color: white;
     -fx-padding: 20;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+/* Day header labels */
+.calendar-header {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #333;
     -fx-alignment: center;
 }
 
-/* Day cells */
-.stack-pane {
-    -fx-background-color: #f1f3f6;
-    -fx-background-radius: 10;
+/* Calendar day cells */
+.day-cell {
+    -fx-background-color: #f9f9f9;
+    -fx-background-radius: 12;
     -fx-border-color: #dcdcdc;
-    -fx-border-radius: 10;
+    -fx-border-radius: 12;
     -fx-alignment: center;
     -fx-cursor: hand;
-    -fx-padding: 6;
-    -fx-pref-width: 80;
-    -fx-pref-height: 60;
+
+    /* Make them expand */
+    -fx-min-width: 80;
+    -fx-min-height: 80;
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
 }
 
-.stack-pane:hover {
-    -fx-background-color: #e3e8ef;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0.3, 0, 2);
+.day-cell:hover {
+    -fx-background-color: #eaf2ff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.3, 0, 4);
 }
 
-/* Today’s highlight */
+/* Today’s cell */
 .today-cell {
-    -fx-background-color: #A3D9A5;
-    -fx-border-color: #4CAF50;
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.4), 6, 0.3, 0, 2);
+    -fx-background-color: #d4f8d4;
+    -fx-border-color: #3cba54;
+    -fx-border-width: 2;
 }
 
-/* Weekday headers */
-.label {
+.today-text {
+    -fx-fill: #2e7d32;   /* dark green text */
     -fx-font-weight: bold;
-    -fx-font-size: 13px;
+    -fx-font-size: 18px;
 }
 
-/* ----- Bottom bar ----- */
-#statusLabel {
-    -fx-background-color: #4a90e2;
-    -fx-text-fill: white;
-    -fx-padding: 6 20;
-    -fx-background-radius: 20;
-    -fx-font-weight: bold;
+
+/* Completed habits color coding */
+.day-complete {
+    -fx-background-color: #a8e6a1;
+}
+.day-partial {
+    -fx-background-color: #fff3a3;
+}
+.day-none {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Status bar */
+#display {
+   -fx-background-color: #a8e6a1;
+   -fx-border-radius: 10;
+   -fx-padding: 10;
 }
