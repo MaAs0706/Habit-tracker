@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            stylesheets="dashboard.css"
+            stylesheets="@dashboard.css"
             fx:controller="org.habittracker.controllers.DashboardController">
 
     <top>
