@@ -1,19 +1,17 @@
 package org.habittracker.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DashboardController {
 
@@ -36,10 +34,10 @@ public class DashboardController {
     private Label statusLabel;
 
     private List<String> habits;
+    private int completedCount = 0; // track how many completed today
 
     @FXML
     public void initialize() {
-        // Sample habits
         habits = new ArrayList<>();
         habits.add("Exercise");
         habits.add("Read Book");
@@ -47,15 +45,16 @@ public class DashboardController {
 
         HabitList.getItems().addAll(habits);
 
+        // Custom cell factory for habits
+        HabitList.setCellFactory(list -> new HabitCell());
+
         setupCalendar(LocalDate.now());
         updateStatus();
     }
 
     private void updateStatus() {
-        // Example: 2 out of 3 habits done
-        int completed = 2;
         int total = habits.size();
-        statusLabel.setText("Today's Progress: " + completed + "/" + total + " habits completed");
+        statusLabel.setText("Today's Progress: " + completedCount + "/" + total + " habits completed");
     }
 
     private void setupCalendar(LocalDate date) {
@@ -68,16 +67,16 @@ public class DashboardController {
         String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
         for (int i = 0; i < days.length; i++) {
             Label lbl = new Label(days[i]);
-            lbl.setStyle("-fx-font-weight: bold;");
-            calendarGrid.add(lbl, i, 0); // row 0 = header row
+            lbl.getStyleClass().add("calendar-header");
+            calendarGrid.add(lbl, i, 0);
         }
 
         // Position the first day of the month
         LocalDate firstDay = yearMonth.atDay(1);
         int startDayOfWeek = firstDay.getDayOfWeek().getValue(); // 1=Mon ... 7=Sun
 
-        int row = 1; // start from row 1 (row 0 used for headers)
-        int col = startDayOfWeek - 1; // align first day under correct weekday
+        int row = 1;
+        int col = startDayOfWeek - 1;
 
         for (int day = 1; day <= daysInMonth; day++) {
             StackPane dayCell = createDayCell(day, date);
@@ -85,7 +84,7 @@ public class DashboardController {
             calendarGrid.add(dayCell, col, row);
 
             col++;
-            if (col > 6) { // wrap after Sunday
+            if (col > 6) {
                 col = 0;
                 row++;
             }
@@ -93,46 +92,140 @@ public class DashboardController {
     }
 
     private StackPane createDayCell(int day, LocalDate currentMonth) {
-        Rectangle rect = new Rectangle(80, 60);
-        rect.setFill(Color.LIGHTGRAY);
-        rect.setStroke(Color.BLACK);
-
         Text dayText = new Text(String.valueOf(day));
+        StackPane cell = new StackPane(dayText);
 
-        StackPane cell = new StackPane(rect, dayText);
+        cell.getStyleClass().add("day-cell");
 
         LocalDate cellDate = LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), day);
 
         // Highlight today
         if (cellDate.equals(LocalDate.now())) {
-            rect.setFill(Color.LIGHTGREEN);
+            cell.getStyleClass().add("today-cell");
+            dayText.getStyleClass().add("today-text");
         }
+
+        GridPane.setFillWidth(cell, true);
+        GridPane.setFillHeight(cell, true);
 
         cell.setOnMouseClicked(e -> {
             System.out.println("Clicked day: " + cellDate);
-            // Later: Show completed habits for this date
         });
 
         return cell;
     }
 
+    /**
+     * Custom ListCell for habits: shows habit name + Mark Completed button
+     */
+    private class HabitCell extends ListCell<String> {
+        private HBox hbox = new HBox(10);
+        private Label habitLabel = new Label();
+        private Button completeBtn = new Button("Mark Completed");
+        private boolean completed = false;
+
+        HabitCell() {
+            hbox.getChildren().addAll(habitLabel, completeBtn);
+
+            completeBtn.setOnAction(e -> {
+                if (!completed) {
+                    completed = true;
+                    habitLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                    completeBtn.setDisable(true);
+                    completedCount++;
+                    updateStatus();
+                }
+            });
+        }
+
+        @Override
+        protected void updateItem(String habit, boolean empty) {
+            super.updateItem(habit, empty);
+
+            if (empty || habit == null) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                habitLabel.setText(habit);
+                setGraphic(hbox);
+            }
+        }
+    }
+
+    // ---------------- Existing Handlers ----------------
 
     @FXML
     private void handleAdd() {
-        System.out.println("Add habit clicked");
-        // TODO: Open add habit dialog
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Add Habit");
+        dialog.setHeaderText("Add a new habit");
+        dialog.setContentText("Enter habit name:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(habit -> {
+            String trimmed = habit.trim();
+            if (!trimmed.isEmpty() && !habits.contains(trimmed)) {
+                habits.add(trimmed);
+                HabitList.getItems().add(trimmed);
+                updateStatus();
+                System.out.println("Added habit: " + trimmed);
+            }
+        });
     }
 
     @FXML
     private void handleEdit() {
-        System.out.println("Edit habit clicked");
-        // TODO: Open edit habit dialog
+        if (habits.isEmpty()) {
+            System.out.println("No habits to edit");
+            return;
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(habits.get(0), habits);
+        dialog.setTitle("Edit Habit");
+        dialog.setHeaderText("Select habit to edit");
+        dialog.setContentText("Choose habit:");
+
+        Optional<String> selectedHabit = dialog.showAndWait();
+
+        selectedHabit.ifPresent(habitToEdit -> {
+            TextInputDialog editDialog = new TextInputDialog(habitToEdit);
+            editDialog.setTitle("Edit Habit");
+            editDialog.setHeaderText("Editing habit: " + habitToEdit);
+            editDialog.setContentText("Enter new habit name:");
+
+            Optional<String> newName = editDialog.showAndWait();
+            newName.ifPresent(newHabitName -> {
+                String trimmedNewName = newHabitName.trim();
+                if (!trimmedNewName.isEmpty() && !habits.contains(trimmedNewName)) {
+                    int index = habits.indexOf(habitToEdit);
+                    habits.set(index, trimmedNewName);
+                    HabitList.getItems().set(index, trimmedNewName);
+                    updateStatus();
+                    System.out.println("Edited habit: " + habitToEdit + " to " + trimmedNewName);
+                }
+            });
+        });
     }
 
     @FXML
     private void handleDelete() {
-        System.out.println("Delete habit clicked");
-        // TODO: Remove selected habit from list and DB
+        if (habits.isEmpty()) {
+            System.out.println("No habits to delete");
+            return;
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(habits.get(0), habits);
+        dialog.setTitle("Delete Habit");
+        dialog.setHeaderText("Select habit to delete");
+        dialog.setContentText("Choose habit:");
+
+        Optional<String> habitToDelete = dialog.showAndWait();
+        habitToDelete.ifPresent(habit -> {
+            habits.remove(habit);
+            HabitList.getItems().remove(habit);
+            updateStatus();
+            System.out.println("Deleted habit: " + habit);
+        });
     }
 
     @FXML

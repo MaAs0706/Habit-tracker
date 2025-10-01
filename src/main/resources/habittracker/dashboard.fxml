@@ -35,15 +35,32 @@
     </left>
 
     <center>
-        <GridPane fx:id="calendarGrid" hgap="10" vgap="10" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets top="20" bottom="20" left="20" right="20"/>
-            </padding>
+        <GridPane fx:id="calendarGrid" hgap="10" vgap="10" BorderPane.alignment="CENTER"
+                  maxWidth="Infinity" maxHeight="Infinity"
+                  styleClass="calendar-root">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS"/>
+                <RowConstraints vgrow="ALWAYS"/>
+                <RowConstraints vgrow="ALWAYS"/>
+                <RowConstraints vgrow="ALWAYS"/>
+                <RowConstraints vgrow="ALWAYS"/>
+                <RowConstraints vgrow="ALWAYS"/>
+            </rowConstraints>
         </GridPane>
     </center>
 
+
     <bottom>
-        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+        <HBox  fx:id="display"   alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="statusLabel" text="Today's Progress: 0/0 habits completed"/>
             </children>
