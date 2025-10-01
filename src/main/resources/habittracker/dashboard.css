@@ -1,8 +1,8 @@
 /* Root background */
-.root {
-    -fx-background-color: linear-gradient(to bottom right, #6a11cb, #2575fc);
-    -fx-font-family: "Segoe UI", sans-serif;
-}
+-fx-background-color: linear-gradient(to top left, #a1c4fd, #c2e9fb, #fbc2eb, #a1c4fd);
+    -fx-font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    -fx-padding: 28 32 28 32;
+
 
 /* Calendar root */
 .calendar-root {
@@ -81,4 +81,54 @@
 #addBtn{
 -fx-border-radius:50;
 -fx-padding:10;
+}
+/* Side Habit List Card */
+.list-view {
+    -fx-background-color: #fffbe9;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #4ade80;
+    -fx-border-width: 2;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, #fbc2eb, 12, 0.3, 0, 4);
+    -fx-font-size: 17px;
+}
+
+/* Habit Item */
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #222;
+    -fx-font-weight: 500;
+    -fx-padding: 10 4 10 16;
+    -fx-border-radius: 16;
+    -fx-transition: background-color 0.3s;
+}
+
+.list-cell:hover {
+    -fx-background-color: #e0f4fc;
+}
+
+.list-cell:selected {
+    -fx-background-color: #a7f3d0;
+}
+
+
+/* Selected habit (glowing blue techy feel) */
+.list-cell:filled:selected {
+    -fx-background-color: linear-gradient(to right, #3f51b5, #5c6bc0);
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.3) , 8,0,0,2 );
+}
+
+/* Completed habit (green glowing) */
+.completed-habit {
+    -fx-text-fill: #4caf50;
+    -fx-font-weight: bold;
+}
+
+.root {
+  -fx-background-color: linear-gradient(to top, #d0e7f9, #ffffff);
+  -fx-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -fx-padding: 30;
 }

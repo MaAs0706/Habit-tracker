@@ -3,10 +3,9 @@ package org.habittracker.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -35,10 +34,10 @@ public class DashboardController {
     private Label statusLabel;
 
     private List<String> habits;
+    private int completedCount = 0; // track how many completed today
 
     @FXML
     public void initialize() {
-        // Sample habits
         habits = new ArrayList<>();
         habits.add("Exercise");
         habits.add("Read Book");
@@ -46,15 +45,16 @@ public class DashboardController {
 
         HabitList.getItems().addAll(habits);
 
+        // Custom cell factory for habits
+        HabitList.setCellFactory(list -> new HabitCell());
+
         setupCalendar(LocalDate.now());
         updateStatus();
     }
 
     private void updateStatus() {
-        // Example: 2 out of 3 habits done
-        int completed = 2;
         int total = habits.size();
-        statusLabel.setText("Today's Progress: " + completed + "/" + total + " habits completed");
+        statusLabel.setText("Today's Progress: " + completedCount + "/" + total + " habits completed");
     }
 
     private void setupCalendar(LocalDate date) {
@@ -69,15 +69,14 @@ public class DashboardController {
             Label lbl = new Label(days[i]);
             lbl.getStyleClass().add("calendar-header");
             calendarGrid.add(lbl, i, 0);
-            // row 0 = header row
         }
 
         // Position the first day of the month
         LocalDate firstDay = yearMonth.atDay(1);
         int startDayOfWeek = firstDay.getDayOfWeek().getValue(); // 1=Mon ... 7=Sun
 
-        int row = 1; // start from row 1 (row 0 used for headers)
-        int col = startDayOfWeek - 1; // align first day under correct weekday
+        int row = 1;
+        int col = startDayOfWeek - 1;
 
         for (int day = 1; day <= daysInMonth; day++) {
             StackPane dayCell = createDayCell(day, date);
@@ -85,7 +84,7 @@ public class DashboardController {
             calendarGrid.add(dayCell, col, row);
 
             col++;
-            if (col > 6) { // wrap after Sunday
+            if (col > 6) {
                 col = 0;
                 row++;
             }
@@ -103,7 +102,7 @@ public class DashboardController {
         // Highlight today
         if (cellDate.equals(LocalDate.now())) {
             cell.getStyleClass().add("today-cell");
-            dayText.getStyleClass().add("today-text"); // 👈 NEW
+            dayText.getStyleClass().add("today-text");
         }
 
         GridPane.setFillWidth(cell, true);
@@ -116,9 +115,44 @@ public class DashboardController {
         return cell;
     }
 
+    /**
+     * Custom ListCell for habits: shows habit name + Mark Completed button
+     */
+    private class HabitCell extends ListCell<String> {
+        private HBox hbox = new HBox(10);
+        private Label habitLabel = new Label();
+        private Button completeBtn = new Button("Mark Completed");
+        private boolean completed = false;
 
+        HabitCell() {
+            hbox.getChildren().addAll(habitLabel, completeBtn);
 
+            completeBtn.setOnAction(e -> {
+                if (!completed) {
+                    completed = true;
+                    habitLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                    completeBtn.setDisable(true);
+                    completedCount++;
+                    updateStatus();
+                }
+            });
+        }
 
+        @Override
+        protected void updateItem(String habit, boolean empty) {
+            super.updateItem(habit, empty);
+
+            if (empty || habit == null) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                habitLabel.setText(habit);
+                setGraphic(hbox);
+            }
+        }
+    }
+
+    // ---------------- Existing Handlers ----------------
 
     @FXML
     private void handleAdd() {
@@ -131,8 +165,6 @@ public class DashboardController {
         result.ifPresent(habit -> {
             String trimmed = habit.trim();
             if (!trimmed.isEmpty() && !habits.contains(trimmed)) {
-                // TODO: Add habit to DB here
-
                 habits.add(trimmed);
                 HabitList.getItems().add(trimmed);
                 updateStatus();
@@ -165,8 +197,6 @@ public class DashboardController {
             newName.ifPresent(newHabitName -> {
                 String trimmedNewName = newHabitName.trim();
                 if (!trimmedNewName.isEmpty() && !habits.contains(trimmedNewName)) {
-                    // TODO: Update habit in DB here
-
                     int index = habits.indexOf(habitToEdit);
                     habits.set(index, trimmedNewName);
                     HabitList.getItems().set(index, trimmedNewName);
@@ -176,7 +206,6 @@ public class DashboardController {
             });
         });
     }
-
 
     @FXML
     private void handleDelete() {
@@ -192,8 +221,6 @@ public class DashboardController {
 
         Optional<String> habitToDelete = dialog.showAndWait();
         habitToDelete.ifPresent(habit -> {
-            // TODO: Delete habit in DB here
-
             habits.remove(habit);
             HabitList.getItems().remove(habit);
             updateStatus();
