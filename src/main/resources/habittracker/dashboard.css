@@ -1,134 +1,69 @@
 /* Root background */
--fx-background-color: linear-gradient(to top left, #a1c4fd, #c2e9fb, #fbc2eb, #a1c4fd);
-    -fx-font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    -fx-padding: 28 32 28 32;
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #6a11cb, #2575fc);
+    -fx-font-family: "Segoe UI", sans-serif;
+}
 
-
-/* Calendar root */
-.calendar-root {
+/* Calendar container */
+#calendarGrid {
     -fx-background-color: white;
     -fx-padding: 20;
-    -fx-hgap: 10;
-    -fx-vgap: 10;
+    -fx-hgap: 12;
+    -fx-vgap: 12;
     -fx-border-color: #ddd;
-    -fx-border-width: 1;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.1, 0, 4);
 }
 
-/* Day header labels */
+/* Calendar headers (Sun, Mon...) */
 .calendar-header {
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-font-size: 16px;
-    -fx-text-fill: #333;
+    -fx-text-fill: #444;
     -fx-alignment: center;
 }
 
-/* Calendar day cells */
+/* Day cells */
 .day-cell {
     -fx-background-color: #f9f9f9;
-    -fx-background-radius: 12;
-    -fx-border-color: #dcdcdc;
-    -fx-border-radius: 12;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
     -fx-alignment: center;
     -fx-cursor: hand;
-
-    /* Make them expand */
-    -fx-min-width: 80;
-    -fx-min-height: 80;
-    -fx-pref-width: 100%;
-    -fx-pref-height: 100%;
+    -fx-pref-width: 80;
+    -fx-pref-height: 70;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0.1, 0, 2);
+    -fx-font-size: 13px;
 }
 
+/* Hover effect */
 .day-cell:hover {
-    -fx-background-color: #eaf2ff;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.3, 0, 4);
+    -fx-background-color: #eef3ff;
+    -fx-border-color: #2575fc;
 }
 
-/* Today’s cell */
+/* Weekend cells */
+.weekend-cell {
+    -fx-background-color: #faf3f3;
+}
+
+/* Today */
 .today-cell {
-    -fx-background-color: #d4f8d4;
-    -fx-border-color: #3cba54;
-    -fx-border-width: 2;
-}
-
-.today-text {
-    -fx-fill: #2e7d32;   /* dark green text */
+    -fx-background-color: linear-gradient(to bottom right, #6a11cb, #2575fc);
+    -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-size: 18px;
+    -fx-border-color: transparent;
 }
 
-
-/* Completed habits color coding */
+/* Habit completion states */
 .day-complete {
-    -fx-background-color: #a8e6a1;
+    -fx-background-color: #b6f2b0; /* green */
 }
 .day-partial {
-    -fx-background-color: #fff3a3;
+    -fx-background-color: #fff6a3; /* yellow */
 }
 .day-none {
-    -fx-background-color: #f0f0f0;
-}
-
-/* Status bar */
-#display {
-   -fx-background-color: #a8e6a1;
-   -fx-border-radius: 10;
-   -fx-padding: 10;
-}
-
-
-#addBtn{
--fx-border-radius:50;
--fx-padding:10;
-}
-/* Side Habit List Card */
-.list-view {
-    -fx-background-color: #fffbe9;
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-border-color: #4ade80;
-    -fx-border-width: 2;
-    -fx-padding: 18;
-    -fx-effect: dropshadow(gaussian, #fbc2eb, 12, 0.3, 0, 4);
-    -fx-font-size: 17px;
-}
-
-/* Habit Item */
-.list-cell {
-    -fx-background-color: transparent;
-    -fx-text-fill: #222;
-    -fx-font-weight: 500;
-    -fx-padding: 10 4 10 16;
-    -fx-border-radius: 16;
-    -fx-transition: background-color 0.3s;
-}
-
-.list-cell:hover {
-    -fx-background-color: #e0f4fc;
-}
-
-.list-cell:selected {
-    -fx-background-color: #a7f3d0;
-}
-
-
-/* Selected habit (glowing blue techy feel) */
-.list-cell:filled:selected {
-    -fx-background-color: linear-gradient(to right, #3f51b5, #5c6bc0);
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.3) , 8,0,0,2 );
-}
-
-/* Completed habit (green glowing) */
-.completed-habit {
-    -fx-text-fill: #4caf50;
-    -fx-font-weight: bold;
-}
-
-.root {
-  -fx-background-color: linear-gradient(to top, #d0e7f9, #ffffff);
-  -fx-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  -fx-padding: 30;
+    -fx-background-color: #f0f0f0; /* gray */
 }
