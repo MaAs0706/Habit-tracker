@@ -22,13 +22,17 @@ public class DatabaseConnection {
             }
             prop.load(input);
 
+            // These properties must be set to your MySQL details
             DB_URL = prop.getProperty("DB_URL");
             DB_USER = prop.getProperty("DB_USER");
             DB_PASSWORD = prop.getProperty("DB_PASSWORD");
 
+            // Manually register the driver if needed, though DriverManager usually finds it
+            // Class.forName("com.mysql.cj.jdbc.Driver"); 
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to load DB configuration");
+            throw new RuntimeException("Failed to load DB configuration", e);
         }
     }
 

@@ -3,273 +3,301 @@ package org.habittracker.controllers;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage; 
+
+import org.habittracker.db.HabitDAO;
+import org.habittracker.models.Habit; 
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 public class DashboardController {
 
-    @FXML
-    private Button addBtn;
-
-    @FXML
-    private Button editBtn;
-
-    @FXML
-    private Button deleteBtn;
-
-    @FXML
-    private Button logoutBtn;
-
-    @FXML
-    private Button prevMonthBtn;
-
-    @FXML
-    private Button nextMonthBtn;
-
-    @FXML
-    private Label monthYearLabel;
-
-    @FXML
-    private VBox habitsContainer;
-
-    @FXML
-    private GridPane calendarGrid;
-
-    @FXML
-    private Label statusLabel;
-
-    private List<String> habits;
-    private int completedCount = 0;
+    // FXML Injections
+    @FXML private Label monthYearLabel;
+    @FXML private VBox habitsContainer;
+    @FXML private GridPane calendarGrid;
+    @FXML private Label statusLabel;
+    @FXML private TextField newHabitField; // Not strictly used with the Dialog, but injected for completeness
+    
+    private List<Habit> habits; 
+    private final HabitDAO habitDAO = new HabitDAO(); 
+    private Map<LocalDate, Map<Integer, Boolean>> dailyHabitStatus; 
+    
     private LocalDate currentDate;
+    private LocalDate selectedDate; 
+    
+    private static final DateTimeFormatter MONTH_YEAR_FORMATTER = DateTimeFormatter.ofPattern("MMMM yyyy");
 
     @FXML
     public void initialize() {
-        habits = new ArrayList<>();
-        habits.add("eat");
-        habits.add("eat again (...)");
-
+        dailyHabitStatus = new HashMap<>();
         currentDate = LocalDate.now();
-
-        refreshHabitsList();
+        selectedDate = currentDate;
+        
+        loadHabits();
+        loadMonthCompletionStatus(currentDate); 
+        
         setupCalendar(currentDate);
-        updateStatus();
+        selectDay(currentDate); 
     }
+    
+    // ---------------- PRIVATE UTILITY METHODS ----------------
 
-    private void refreshHabitsList() {
-        habitsContainer.getChildren().clear();
-
-        for (String habit : habits) {
-            HBox habitItem = createHabitItem(habit);
-            habitsContainer.getChildren().add(habitItem);
+    private void loadHabits() {
+        habits = habitDAO.getAllHabits();
+        // If no habits, create some defaults
+        if (habits.isEmpty()) {
+            habitDAO.addHabit(new Habit("Read 20 pages"));
+            habitDAO.addHabit(new Habit("Drink 2L water"));
+            habits = habitDAO.getAllHabits(); 
         }
     }
 
-    private HBox createHabitItem(String habitName) {
-        HBox hbox = new HBox(10);
-        hbox.setAlignment(Pos.CENTER_LEFT);
-        hbox.getStyleClass().add("habit-item");
+    private void loadMonthCompletionStatus(LocalDate date) {
+        dailyHabitStatus.clear(); 
+        YearMonth yearMonth = YearMonth.from(date);
+        int daysInMonth = yearMonth.lengthOfMonth();
 
-        Label nameLabel = new Label(habitName);
-        nameLabel.getStyleClass().add("habit-name");
-        nameLabel.setMaxWidth(Double.MAX_VALUE);
-        HBox.setHgrow(nameLabel, javafx.scene.layout.Priority.ALWAYS);
-
-        Button markBtn = new Button("Mark Incomplete");
-        markBtn.getStyleClass().add("habit-button");
-        markBtn.setOnAction(e -> {
-            if (markBtn.getText().equals("Mark Incomplete")) {
-                markBtn.setText("Mark Complete");
-                completedCount--;
-            } else {
-                markBtn.setText("Mark Incomplete");
-                completedCount++;
+        for (int day = 1; day <= daysInMonth; day++) {
+            LocalDate dayDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), day);
+            Map<Integer, Boolean> dayStatus = habitDAO.getCompletionStatusForDay(dayDate);
+            if (!dayStatus.isEmpty()) { 
+                dailyHabitStatus.put(dayDate, dayStatus);
             }
-            updateStatus();
-        });
-
-        hbox.getChildren().addAll(nameLabel, markBtn);
-        return hbox;
-    }
-
-    private void updateStatus() {
-        int total = habits.size();
-        statusLabel.setText("Today's Progress: " + completedCount + "/" + total + " habits completed");
+        }
     }
 
     private void setupCalendar(LocalDate date) {
         calendarGrid.getChildren().clear();
-
-        // Update month/year label
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
-        monthYearLabel.setText(date.format(formatter));
+        calendarGrid.getRowConstraints().clear(); 
 
         YearMonth yearMonth = YearMonth.from(date);
-        int daysInMonth = yearMonth.lengthOfMonth();
+        monthYearLabel.setText(yearMonth.format(MONTH_YEAR_FORMATTER));
 
-        // Add day headers (Mon–Sun)
-        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-        for (int i = 0; i < days.length; i++) {
-            Label lbl = new Label(days[i]);
-            lbl.getStyleClass().add("calendar-header");
-            lbl.setMaxWidth(Double.MAX_VALUE);
-            lbl.setAlignment(Pos.CENTER);
-            calendarGrid.add(lbl, i, 0);
-        }
+        LocalDate calendarStart = yearMonth.atDay(1);
+        int dayOfWeek = calendarStart.getDayOfWeek().getValue(); // 1 (Mon) to 7 (Sun)
+        
+        // Adjust for a Monday-start calendar: Mon=0, Tue=1, ..., Sun=6
+        int offset = dayOfWeek - 1; 
+        if (dayOfWeek == 7) offset = 6; // If Sunday is the first day of the month
 
-        // Position the first day of the month
-        LocalDate firstDay = yearMonth.atDay(1);
-        int startDayOfWeek = firstDay.getDayOfWeek().getValue(); // 1=Mon ... 7=Sun
+        LocalDate firstDayOfGrid = calendarStart.minusDays(offset); 
 
-        int row = 1;
-        int col = startDayOfWeek - 1;
+        for (int row = 0; row < 6; row++) {
+            RowConstraints rowC = new RowConstraints();
+            rowC.setPercentHeight(100.0 / 6);
+            calendarGrid.getRowConstraints().add(rowC);
+            
+            for (int col = 0; col < 7; col++) {
+                LocalDate dayDate = firstDayOfGrid.plusDays(row * 7L + col);
+                
+                StackPane dayCell = createDayCell(dayDate, yearMonth);
+                calendarGrid.add(dayCell, col, row);
 
-        for (int day = 1; day <= daysInMonth; day++) {
-            StackPane dayCell = createDayCell(day, date);
-            calendarGrid.add(dayCell, col, row);
-
-            col++;
-            if (col > 6) {
-                col = 0;
-                row++;
+                updateCellColor(dayDate, dayCell);
             }
         }
     }
-
-    private StackPane createDayCell(int day, LocalDate currentMonth) {
-        Text dayText = new Text(String.valueOf(day));
-        StackPane cell = new StackPane(dayText);
-
-        cell.getStyleClass().add("day-cell");
-
-        LocalDate cellDate = LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), day);
-
-        // Highlight today
-        if (cellDate.equals(LocalDate.now())) {
-            cell.getStyleClass().add("today-cell");
+    
+    private void selectDay(LocalDate date) {
+        selectedDate = date;
+        refreshHabitList(date);
+        refreshCalendarView(); // Force a calendar redraw to update selection style
+    }
+    
+    private StackPane createDayCell(LocalDate dayDate, YearMonth currentMonth) {
+        StackPane cell = new StackPane();
+        Text text = new Text(String.valueOf(dayDate.getDayOfMonth()));
+        cell.getChildren().add(text);
+        
+        if (!YearMonth.from(dayDate).equals(currentMonth)) {
+            cell.getStyleClass().add("other-month");
+        } else {
+            cell.setOnMouseClicked(e -> selectDay(dayDate));
         }
 
-        GridPane.setFillWidth(cell, true);
-        GridPane.setFillHeight(cell, true);
-
-        cell.setOnMouseClicked(e -> {
-            System.out.println("Clicked day: " + cellDate);
-        });
+        StackPane.setAlignment(text, Pos.TOP_LEFT);
+        cell.getStyleClass().add("day-cell");
 
         return cell;
     }
 
+    // FIX 1: Corrected logic to apply 'missed' (red) color correctly.
+    private void updateCellColor(LocalDate date, StackPane cell) {
+        cell.getStyleClass().removeAll("day-cell-complete", "day-cell-partial", "day-cell-missed", "today-cell", "selected-cell");
+        
+        if (!cell.getStyleClass().contains("day-cell")) {
+            cell.getStyleClass().add("day-cell");
+        }
+
+        long totalHabits = habits.size();
+        
+        if (totalHabits > 0) {
+            Map<Integer, Boolean> status = dailyHabitStatus.getOrDefault(date, new HashMap<>()); 
+            long completedCount = status.values().stream().filter(s -> s).count();
+
+            if (completedCount == totalHabits) {
+                cell.getStyleClass().add("day-cell-complete"); 
+            } else if (completedCount > 0) {
+                cell.getStyleClass().add("day-cell-partial"); 
+            } else if (date.isBefore(LocalDate.now())) {
+                // Apply missed color only if in the past AND 0 habits completed
+                cell.getStyleClass().add("day-cell-missed"); 
+            }
+        }
+        
+        if (date.equals(LocalDate.now())) {
+            cell.getStyleClass().add("today-cell");
+        }
+        
+        // FIX 2: Ensure selected cell style is applied last and correctly
+        if (date.equals(selectedDate) && !YearMonth.from(date).equals(YearMonth.from(currentDate))) {
+             // If selected day is NOT in the currently viewed month, don't highlight strongly
+        } else if (date.equals(selectedDate)) {
+             cell.getStyleClass().add("selected-cell");
+        }
+    }
+    
+    private void refreshCalendarView() {
+        loadMonthCompletionStatus(currentDate);
+        setupCalendar(currentDate);
+        refreshHabitList(selectedDate);
+    }
+    
+    private void refreshHabitList(LocalDate date) {
+        habitsContainer.getChildren().clear();
+        
+        Map<Integer, Boolean> dayStatus = habitDAO.getCompletionStatusForDay(date);
+        
+        for (Habit habit : habits) {
+            boolean completed = dayStatus.getOrDefault(habit.getId(), false);
+            HBox habitItem = createHabitItem(habit, completed);
+            habitsContainer.getChildren().add(habitItem);
+        }
+        
+        updateStatusLabel();
+    }
+    
+    // FIX 3: Corrected list item creation to use CheckBox as seen in Image 2
+    private HBox createHabitItem(Habit habit, boolean completed) {
+        HBox item = new HBox(10);
+        item.setAlignment(Pos.CENTER_LEFT);
+        item.getStyleClass().add("habit-item");
+        
+        // CheckBox is used for the toggle and holds the text (as seen in Image 2)
+        CheckBox checkBox = new CheckBox(habit.getName());
+        checkBox.setSelected(completed);
+        
+        // Apply initial style to the container
+        if (completed) {
+            item.getStyleClass().add("habit-item-completed");
+        }
+        
+        item.getChildren().add(checkBox);
+
+        // Set the action to update the database and the UI style
+        checkBox.setOnAction(e -> {
+            boolean isChecked = checkBox.isSelected();
+            habitDAO.markCompleted(habit, selectedDate, isChecked);
+            
+            // Dynamically update the HBox style
+            if (isChecked) {
+                item.getStyleClass().add("habit-item-completed");
+            } else {
+                item.getStyleClass().remove("habit-item-completed");
+            }
+            
+            // This updates the status label AND the calendar grid color
+            refreshCalendarView(); 
+        });
+        
+        return item;
+    }
+    
+    // FIX 4: Update status label to show the correct selected date
+    private void updateStatusLabel() {
+        Map<Integer, Boolean> status = habitDAO.getCompletionStatusForDay(selectedDate);
+        long completedCount = status.values().stream().filter(s -> s).count();
+        long totalCount = habits.size();
+        
+        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("MMM dd");
+
+        if (totalCount == 0) {
+            statusLabel.setText("0/0 Habits. Add a habit!");
+        } else {
+            statusLabel.setText(String.format(
+                "Progress for %s: %d/%d completed", 
+                selectedDate.format(displayFormatter), 
+                completedCount, 
+                totalCount
+            ));
+        }
+    }
+
+    // ---------------- UI EVENT HANDLERS ----------------
+
     @FXML
     private void handlePrevMonth() {
         currentDate = currentDate.minusMonths(1);
-        setupCalendar(currentDate);
+        refreshCalendarView();
     }
 
     @FXML
     private void handleNextMonth() {
         currentDate = currentDate.plusMonths(1);
-        setupCalendar(currentDate);
+        refreshCalendarView();
     }
-
-    @FXML
-    private void handleLogout() {
-        System.out.println("Logout clicked");
-        // TODO: Implement logout functionality
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Logout");
-        alert.setHeaderText(null);
-        alert.setContentText("Logging out...");
-        alert.showAndWait();
-    }
-
-    @FXML
-    private void handleAdd() {
+    
+    // Logic for adding a habit (uses a Dialog since no TextField is globally visible)
+    private void handleAddHabitLogic() {
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Add Habit");
-        dialog.setHeaderText("Add a new habit");
-        dialog.setContentText("Enter habit name:");
+        dialog.setTitle("Add New Habit");
+        dialog.setHeaderText("Enter the name of your new habit:");
+        dialog.setContentText("Habit Name:");
 
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(habit -> {
-            String trimmed = habit.trim();
-            if (!trimmed.isEmpty() && !habits.contains(trimmed)) {
-                habits.add(trimmed);
-                refreshHabitsList();
-                updateStatus();
-                System.out.println("Added habit: " + trimmed);
+        dialog.showAndWait().ifPresent(name -> {
+            if (!name.trim().isEmpty()) {
+                Habit newHabit = new Habit(name.trim());
+                habitDAO.addHabit(newHabit); 
+                loadHabits(); 
+                refreshCalendarView(); 
             }
         });
     }
 
+    // HANDLER for FXML onAction="#handleAdd"
+    @FXML
+    private void handleAdd() {
+        handleAddHabitLogic(); 
+    }
+    
+    // HANDLER for FXML onAction="#handleEdit"
     @FXML
     private void handleEdit() {
-        if (habits.isEmpty()) {
-            showAlert("No Habits", "No habits available to edit.");
-            return;
-        }
-
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(habits.get(0), habits);
-        dialog.setTitle("Edit Habit");
-        dialog.setHeaderText("Select habit to edit");
-        dialog.setContentText("Choose habit:");
-
-        Optional<String> selectedHabit = dialog.showAndWait();
-
-        selectedHabit.ifPresent(habitToEdit -> {
-            TextInputDialog editDialog = new TextInputDialog(habitToEdit);
-            editDialog.setTitle("Edit Habit");
-            editDialog.setHeaderText("Editing habit: " + habitToEdit);
-            editDialog.setContentText("Enter new habit name:");
-
-            Optional<String> newName = editDialog.showAndWait();
-            newName.ifPresent(newHabitName -> {
-                String trimmedNewName = newHabitName.trim();
-                if (!trimmedNewName.isEmpty() && !habits.contains(trimmedNewName)) {
-                    int index = habits.indexOf(habitToEdit);
-                    habits.set(index, trimmedNewName);
-                    refreshHabitsList();
-                    updateStatus();
-                    System.out.println("Edited habit: " + habitToEdit + " to " + trimmedNewName);
-                }
-            });
-        });
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Edit functionality not yet implemented.");
+        alert.showAndWait();
     }
-
+    
+    // HANDLER for FXML onAction="#handleDelete"
     @FXML
     private void handleDelete() {
-        if (habits.isEmpty()) {
-            showAlert("No Habits", "No habits available to delete.");
-            return;
-        }
-
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(habits.get(0), habits);
-        dialog.setTitle("Delete Habit");
-        dialog.setHeaderText("Select habit to delete");
-        dialog.setContentText("Choose habit:");
-
-        Optional<String> habitToDelete = dialog.showAndWait();
-        habitToDelete.ifPresent(habit -> {
-            habits.remove(habit);
-            refreshHabitsList();
-            updateStatus();
-            System.out.println("Deleted habit: " + habit);
-        });
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Delete functionality not yet implemented.");
+        alert.showAndWait();
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    // HANDLER for FXML onAction="#handleLogout"
+    @FXML
+    private void handleLogout() {
+        if (monthYearLabel != null && monthYearLabel.getScene() != null) {
+            Stage stage = (Stage) monthYearLabel.getScene().getWindow();
+            stage.close();
+        }
     }
 }

@@ -61,10 +61,6 @@
     -fx-background-color: #dc2626;
 }
 
-#logoutBtn:pressed {
-    -fx-background-color: #b91c1c;
-}
-
 /* Main content area */
 .content-container {
     -fx-background-color: #0a1929;
@@ -72,7 +68,7 @@
     -fx-spacing: 30;
 }
 
-/* Left sidebar - Your Habits section */
+/* Right sidebar - Your Habits section */
 .habits-sidebar {
     -fx-background-color: #2d4a65;
     -fx-background-radius: 12;
@@ -89,64 +85,47 @@
     -fx-text-fill: #ffffff;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-padding: 0 0 20 0;
+    -fx-padding: 0 0 10 0;
 }
 
-/* Habit list items */
+/* Scrollpane inside the habits sidebar */
+.habits-scrollpane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.habits-scrollpane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Habit list items (General) */
 .habit-item {
-    -fx-background-color: #5a7a95;
+    -fx-background-color: #4a637a; /* Default Incomplete/Neutral */
     -fx-background-radius: 10;
     -fx-padding: 15 18 15 18;
     -fx-spacing: 12;
     -fx-alignment: CENTER_LEFT;
-    -fx-border-color: #6a8aa5;
-    -fx-border-width: 2;
+    -fx-border-color: #5a738a;
+    -fx-border-width: 1;
     -fx-border-radius: 10;
 }
 
-/* Completed habit item */
+/* Completed habit item style */
 .habit-item-completed {
-    -fx-background-color: #d4edda;
-    -fx-border-color: #28a745;
-    -fx-border-width: 2;
+    -fx-background-color: #10b981; /* Light Green background for completed */
+    -fx-border-color: #059669;
 }
 
-.habit-name {
+/* Styling for the CheckBox text within the list item */
+.habit-item .check-box {
     -fx-text-fill: #e8eef5;
     -fx-font-size: 15px;
     -fx-font-weight: 600;
 }
 
-/* Completed habit name */
-.habit-name-completed {
-    -fx-text-fill: #155724;
-    -fx-font-weight: bold;
-}
-
-.habit-button {
-    -fx-background-color: #3d5366;
+.habit-item-completed .check-box {
     -fx-text-fill: #ffffff;
-    -fx-background-radius: 8;
-    -fx-padding: 8 16 8 16;
-    -fx-font-size: 13px;
-    -fx-cursor: hand;
-    -fx-border-color: #4d6376;
-    -fx-border-width: 1;
-    -fx-border-radius: 8;
-}
-
-.habit-button:hover {
-    -fx-background-color: #4d6376;
-}
-
-/* Completed habit button */
-.habit-button-completed {
-    -fx-background-color: #28a745;
-    -fx-border-color: #1e7e34;
-}
-
-.habit-button-completed:hover {
-    -fx-background-color: #218838;
+    -fx-font-weight: bold;
 }
 
 /* Calendar section */
@@ -168,71 +147,68 @@
     -fx-vgap: 10;
 }
 
-/* Calendar header days (Mon, Tue, etc.) */
-.calendar-header {
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-alignment: center;
-    -fx-padding: 10;
-}
-
-/* Calendar day cells */
+/* Calendar day cells (General) */
 .day-cell {
-    -fx-background-color: #2a4a65;
+    -fx-background-color: #2a4a65; /* Default blue-grey */
     -fx-border-color: #3d5f7f;
     -fx-border-width: 2;
     -fx-alignment: center;
     -fx-padding: 18;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
-    -fx-min-width: 70;
-    -fx-min-height: 70;
-    -fx-max-width: 70;
-    -fx-max-height: 70;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 2);
 }
 
-.day-cell:hover {
-    -fx-background-color: #3d6080;
-    -fx-border-color: #5a8bc4;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(90, 139, 196, 0.4), 8, 0, 0, 3);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-}
-
 .day-cell .text {
-    -fx-fill: #d4a574;
+    -fx-fill: #d4a574; /* Text color for days */
     -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
 
-.day-cell:hover .text {
-    -fx-fill: #ffffff;
-}
-
-/* Today's cell - Green highlight */
-.today-cell {
-    -fx-background-color: #10b981;
+/* Completion Status Colors */
+.day-cell-complete {
+    -fx-background-color: #10b981; /* Green */
     -fx-border-color: #059669;
-    -fx-border-width: 2;
 }
-
-.today-cell .text {
+.day-cell-complete .text {
     -fx-fill: #ffffff;
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
 }
 
-/* Empty cells (not in current month) */
-.empty-cell {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+.day-cell-missed {
+    -fx-background-color: #ef4444; /* Red */
+    -fx-border-color: #dc2626;
+}
+.day-cell-missed .text {
+    -fx-fill: #ffffff;
 }
 
-.empty-cell .text {
-    -fx-fill: #4d6a7f;
+.day-cell-partial {
+    -fx-background-color: #3b82f6; /* Blue */
+    -fx-border-color: #2563eb;
+}
+.day-cell-partial .text {
+    -fx-fill: #ffffff;
+}
+
+/* Highlight Today */
+.today-cell {
+    -fx-border-color: #ffcc00; /* Bright Yellow/Gold border for today */
+    -fx-border-width: 4;
+}
+
+/* Highlight Selected Day (Yellow background) */
+.selected-cell {
+    -fx-background-color: #fca311; /* Bright Yellow for selection */
+    -fx-border-color: #ff8c00;
+}
+
+.selected-cell .text {
+    -fx-fill: #000000;
+}
+
+/* Day cells from other months */
+.other-month {
+    -fx-opacity: 0.5;
 }
 
 /* Bottom section - Progress and buttons */
@@ -246,13 +222,6 @@
     -fx-border-width: 2;
     -fx-border-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 3);
-}
-
-.progress-label {
-    -fx-text-fill: #4fc3f7;
-    -fx-font-size: 17px;
-    -fx-font-weight: 600;
-    -fx-padding: 5;
 }
 
 /* Action buttons container */
@@ -270,18 +239,8 @@
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
-    -fx-border-color: #2563eb;
-    -fx-border-width: 2;
-    -fx-border-radius: 8;
 }
-
-#addBtn:hover {
-    -fx-background-color: #2563eb;
-}
-
-#addBtn:pressed {
-    -fx-background-color: #1d4ed8;
-}
+#addBtn:hover { -fx-background-color: #2563eb; }
 
 /* Edit button - Yellow */
 #editBtn {
@@ -292,18 +251,8 @@
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
-    -fx-border-color: #f59e0b;
-    -fx-border-width: 2;
-    -fx-border-radius: 8;
 }
-
-#editBtn:hover {
-    -fx-background-color: #f59e0b;
-}
-
-#editBtn:pressed {
-    -fx-background-color: #d97706;
-}
+#editBtn:hover { -fx-background-color: #f59e0b; }
 
 /* Delete button - Red */
 #deleteBtn {
@@ -314,40 +263,8 @@
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
-    -fx-border-color: #dc2626;
-    -fx-border-width: 2;
-    -fx-border-radius: 8;
 }
-
-#deleteBtn:hover {
-    -fx-background-color: #dc2626;
-}
-
-#deleteBtn:pressed {
-    -fx-background-color: #b91c1c;
-}
-
-/* Analytics button - Keep if needed */
-#analyticsBtn {
-    -fx-background-color: #10b981;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-    -fx-padding: 12 35 12 35;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-    -fx-border-color: #059669;
-    -fx-border-width: 2;
-    -fx-border-radius: 8;
-}
-
-#analyticsBtn:hover {
-    -fx-background-color: #059669;
-}
-
-#analyticsBtn:pressed {
-    -fx-background-color: #047857;
-}
+#deleteBtn:hover { -fx-background-color: #dc2626; }
 
 /* Labels */
 .label {
@@ -357,37 +274,7 @@
 
 /* Status label */
 #statusLabel {
-    -fx-text-fill: #00bfff;
-    -fx-font-size: 16px;
+    -fx-text-fill: #4fc3f7;
+    -fx-font-size: 17px;
     -fx-font-weight: 600;
-}
-
-/* Scrollbars */
-.scroll-bar {
-    -fx-background-color: #1a3a52;
-}
-
-.scroll-bar .thumb {
-    -fx-background-color: #4d6a7f;
-    -fx-background-radius: 5;
-}
-
-.scroll-bar .thumb:hover {
-    -fx-background-color: #5d7a8f;
-}
-
-.scroll-bar .increment-button,
-.scroll-bar .decrement-button {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
-}
-
-/* HBox containers */
-.hbox {
-    -fx-background-color: transparent;
-}
-
-/* VBox containers */
-.vbox {
-    -fx-background-color: transparent;
 }

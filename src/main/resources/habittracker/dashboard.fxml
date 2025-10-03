@@ -6,36 +6,43 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             stylesheets="@dashboard.css"
-            fx:controller="org.habittracker.controllers.DashboardController">
+            fx:controller="org.habittracker.controllers.DashboardController"
+            styleClass="border-pane">
 
-    <!-- Top Navigation Bar with Month Selector and Logout -->
     <top>
-        <HBox spacing="20" alignment="CENTER" styleClass="top-nav">
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="top-nav">
             <children>
-                <!-- Month Navigation -->
-                <HBox spacing="15" alignment="CENTER" HBox.hgrow="ALWAYS">
-                    <Button fx:id="prevMonthBtn" text="(" styleClass="nav-button" onAction="#handlePrevMonth"/>
-                    <Label fx:id="monthYearLabel" text="September 2025" styleClass="month-label"/>
-                    <Button fx:id="nextMonthBtn" text=")" styleClass="nav-button" onAction="#handleNextMonth"/>
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                    <Button fx:id="prevMonthBtn" text="&lt;" styleClass="nav-button" onAction="#handlePrevMonth"/>
+                    <Label fx:id="monthYearLabel" text="October 2025" styleClass="month-label"/>
+                    <Button fx:id="nextMonthBtn" text="&gt;" styleClass="nav-button" onAction="#handleNextMonth"/>
                 </HBox>
 
-                <!-- Logout Button -->
                 <Button fx:id="logoutBtn" text="Logout" onAction="#handleLogout"/>
             </children>
         </HBox>
     </top>
 
-    <!-- Main Content Area -->
     <center>
         <HBox spacing="30" styleClass="content-container">
 
-            <!-- Calendar Section (Left/Center) -->
-            <VBox spacing="20" HBox.hgrow="ALWAYS">
+            <VBox spacing="30" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                 <children>
-                    <!-- Calendar Grid -->
-                    <VBox styleClass="calendar-section" VBox.vgrow="ALWAYS">
+                    <VBox styleClass="calendar-section" VBox.vgrow="ALWAYS" minHeight="450">
                         <children>
-                            <GridPane fx:id="calendarGrid" styleClass="calendar-root">
+                            <HBox styleClass="calendar-header-row" alignment="CENTER">
+                                <children>
+                                    <Label text="Mon" styleClass="calendar-header" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" alignment="CENTER"/>
+                                    <Label text="Tue" styleClass="calendar-header" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" alignment="CENTER"/>
+                                    <Label text="Wed" styleClass="calendar-header" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" alignment="CENTER"/>
+                                    <Label text="Thu" styleClass="calendar-header" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" alignment="CENTER"/>
+                                    <Label text="Fri" styleClass="calendar-header" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" alignment="CENTER"/>
+                                    <Label text="Sat" styleClass="calendar-header" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" alignment="CENTER"/>
+                                    <Label text="Sun" styleClass="calendar-header" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" alignment="CENTER"/>
+                                </children>
+                            </HBox>
+                            
+                            <GridPane fx:id="calendarGrid" styleClass="calendar-root" VBox.vgrow="ALWAYS">
                                 <columnConstraints>
                                     <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
                                     <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
@@ -49,10 +56,9 @@
                         </children>
                     </VBox>
 
-                    <!-- Bottom Progress and Buttons -->
-                    <VBox styleClass="bottom-section">
+                    <VBox fx:id="bottomSection" styleClass="bottom-section" VBox.vgrow="NEVER">
                         <children>
-                            <Label fx:id="statusLabel" text="Today's Progress: 2/2 habits completed" styleClass="progress-label"/>
+                            <Label fx:id="statusLabel" text="1/2 Habits Completed" styleClass="statusLabel"/>
 
                             <HBox spacing="15" alignment="CENTER" styleClass="button-container">
                                 <Button text="+ Add Habit" fx:id="addBtn" onAction="#handleAdd"/>
@@ -64,14 +70,15 @@
                 </children>
             </VBox>
 
-            <!-- Right Sidebar - Your Habits -->
-            <VBox styleClass="habits-sidebar" spacing="15">
+            <VBox styleClass="habits-sidebar" spacing="15" VBox.vgrow="ALWAYS">
                 <children>
                     <Label text="Your Habits" styleClass="habits-title"/>
 
-                    <VBox fx:id="habitsContainer" spacing="10">
-                        <!-- Habit items will be added dynamically -->
-                    </VBox>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="habits-scrollpane">
+                        <content>
+                            <VBox fx:id="habitsContainer" spacing="10" style="-fx-padding: 0;"/>
+                        </content>
+                    </ScrollPane>
                 </children>
             </VBox>
 
