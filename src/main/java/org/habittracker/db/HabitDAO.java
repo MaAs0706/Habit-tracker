@@ -128,6 +128,53 @@ public class HabitDAO {
         }
         return status;
     }
+    // 1. Daily completion counts (for line chart)
+    public Map<LocalDate, Integer> getDailyCompletionCounts(LocalDate start, LocalDate end) {
+        Map<LocalDate, Integer> counts = new HashMap<>();
+        String sql = """
+        SELECT completion_date, COUNT(*) AS total
+        FROM habit_completion
+        WHERE completed = TRUE
+          AND completion_date BETWEEN ? AND ?
+        GROUP BY completion_date
+        ORDER BY completion_date
+    """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, java.sql.Date.valueOf(start));
+            stmt.setDate(2, java.sql.Date.valueOf(end));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    counts.put(rs.getDate("completion_date").toLocalDate(),
+                            rs.getInt("total"));
+                }
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return counts;
+    }
+
+    // 2. Habit completion distribution (for pie chart)
+    public Map<String, Integer> getHabitCompletionCounts(LocalDate start, LocalDate end) {
+        Map<String, Integer> counts = new HashMap<>();
+        String sql = """
+        SELECT h.name, COUNT(*) AS total
+        FROM habit_completion hc
+        JOIN habit h ON hc.habit_id = h.id
+        WHERE hc.completed = TRUE
+          AND hc.completion_date BETWEEN ? AND ?
+        GROUP BY h.name
+    """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, java.sql.Date.valueOf(start));
+            stmt.setDate(2, java.sql.Date.valueOf(end));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    counts.put(rs.getString("name"), rs.getInt("total"));
+                }
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return counts;
+    }
+
 
     public void markCompleted(Habit habit, LocalDate date, boolean completed) {
         String check = "SELECT id FROM habit_completion WHERE habit_id = ? AND completion_date = ?";

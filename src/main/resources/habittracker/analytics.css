@@ -1,0 +1,93 @@
+/* =============================
+   Dark Theme for Analytics Page
+   ============================= */
+
+.root {
+    -fx-background-color: #121212; /* dark background */
+    -fx-text-fill: #e0e0e0;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Titles / Headers */
+.label {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* VBox/HBox padding */
+.vbox, .hbox {
+    -fx-spacing: 15px;
+    -fx-padding: 20px;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #1e1e1e;
+    -fx-text-fill: #e0e0e0;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #333333;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #2c2c2c;
+}
+
+/* ChoiceBox */
+.choice-box {
+    -fx-background-color: #1e1e1e;
+    -fx-mark-color: #e0e0e0;
+    -fx-border-color: #333333;
+    -fx-border-radius: 4;
+    -fx-text-fill: #e0e0e0;
+}
+
+.choice-box .label {
+    -fx-text-fill: #e0e0e0;
+}
+
+/* Charts general styling */
+.chart {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e0e0e0;
+}
+
+.chart-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.axis-label {
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 12px;
+}
+
+.axis {
+    -fx-tick-label-fill: #cccccc;
+}
+
+/* Line chart series colors */
+.default-color0.chart-series-line { -fx-stroke: #4fc3f7; }
+.default-color0.chart-line-symbol { -fx-background-color: #4fc3f7, white; }
+
+.default-color1.chart-series-line { -fx-stroke: #81c784; }
+.default-color1.chart-line-symbol { -fx-background-color: #81c784, white; }
+
+/* Pie chart colors */
+.default-color0.chart-pie { -fx-pie-color: #4fc3f7; }
+.default-color1.chart-pie { -fx-pie-color: #81c784; }
+.default-color2.chart-pie { -fx-pie-color: #f06292; }
+.default-color3.chart-pie { -fx-pie-color: #ffb74d; }
+.default-color4.chart-pie { -fx-pie-color: #ba68c8; }
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #e0e0e0;
+}
