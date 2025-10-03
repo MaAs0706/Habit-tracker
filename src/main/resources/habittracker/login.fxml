@@ -10,7 +10,8 @@
 
     <center>
         <VBox>
-            <Label text="Welcome Back to Habit Tracker " styleClass="title"/>
+            <Label text="Welcome Back to " styleClass="title"/>
+            <Label text="Habit Tracker" styleClass="title"/>
             <TextField fx:id="usernameField" promptText="Enter Username"/>
             <PasswordField fx:id="passwordField" promptText="Enter Password"/>
 
