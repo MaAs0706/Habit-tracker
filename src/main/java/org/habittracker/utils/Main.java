@@ -2,44 +2,37 @@ package org.habittracker.utils;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.habittracker.db.DatabaseConnection; // Assuming this package exists
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.IOException;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
-        // Load dashboard.fxml 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/habittracker/dashboard.fxml"));
-
-        // FIX 1: Set a large enough starting size for the responsive layout to work
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
-
-        // FIX 2: Attach the correct CSS file (dashboard.css)
-        // Assuming dashboard.css is in the same folder as dashboard.fxml
-        scene.getStylesheets().add(getClass().getResource("/habittracker/dashboard.css").toExternalForm());
-
-        stage.setTitle("Habit Tracker - Dashboard"); // Title change reflects the correct FXML
+    public void start(Stage stage) throws IOException {
+        // Correct path to load the FXML file from the 'resources/habittracker' folder
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/habittracker/dashboard.fxml")); 
         
-        // Ensure the user can't squish the window too small later
-        stage.setMinWidth(1100);
-        stage.setMinHeight(750);
+        Parent root = fxmlLoader.load(); 
+        
+        // Use a good default size for the dashboard layout
+        Scene scene = new Scene(root, 1100, 750); 
+        
+        stage.setTitle("Habit Tracker - Dashboard");
+
+        // Set minimum size to prevent the UI from breaking if resized too small
+        stage.setMinWidth(1000);
+        stage.setMinHeight(650);
         
         stage.setScene(scene);
         stage.show();
     }
 
     public static void main(String[] args) {
-        // Database connection logic is kept as is
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            System.out.println("✅ Connected to DB: " + conn.getCatalog());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        launch(args); // Pass args to launch() is good practice
+        // Database initialization is handled when HabitDAO is instantiated in the Controller.
+        // We only need to launch the JavaFX application here.
+        launch(args);
     }
 }
