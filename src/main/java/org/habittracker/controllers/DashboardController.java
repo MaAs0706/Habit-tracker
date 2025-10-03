@@ -1,14 +1,17 @@
 package org.habittracker.controllers;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +28,19 @@ public class DashboardController {
     private Button deleteBtn;
 
     @FXML
-    private ListView<String> HabitList;
+    private Button logoutBtn;
+
+    @FXML
+    private Button prevMonthBtn;
+
+    @FXML
+    private Button nextMonthBtn;
+
+    @FXML
+    private Label monthYearLabel;
+
+    @FXML
+    private VBox habitsContainer;
 
     @FXML
     private GridPane calendarGrid;
@@ -34,22 +49,56 @@ public class DashboardController {
     private Label statusLabel;
 
     private List<String> habits;
-    private int completedCount = 0; // track how many completed today
+    private int completedCount = 0;
+    private LocalDate currentDate;
 
     @FXML
     public void initialize() {
         habits = new ArrayList<>();
-        habits.add("Exercise");
-        habits.add("Read Book");
-        habits.add("Meditate");
+        habits.add("eat");
+        habits.add("eat again (...)");
 
-        HabitList.getItems().addAll(habits);
+        currentDate = LocalDate.now();
 
-        // Custom cell factory for habits
-        HabitList.setCellFactory(list -> new HabitCell());
-
-        setupCalendar(LocalDate.now());
+        refreshHabitsList();
+        setupCalendar(currentDate);
         updateStatus();
+    }
+
+    private void refreshHabitsList() {
+        habitsContainer.getChildren().clear();
+
+        for (String habit : habits) {
+            HBox habitItem = createHabitItem(habit);
+            habitsContainer.getChildren().add(habitItem);
+        }
+    }
+
+    private HBox createHabitItem(String habitName) {
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        hbox.getStyleClass().add("habit-item");
+
+        Label nameLabel = new Label(habitName);
+        nameLabel.getStyleClass().add("habit-name");
+        nameLabel.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(nameLabel, javafx.scene.layout.Priority.ALWAYS);
+
+        Button markBtn = new Button("Mark Incomplete");
+        markBtn.getStyleClass().add("habit-button");
+        markBtn.setOnAction(e -> {
+            if (markBtn.getText().equals("Mark Incomplete")) {
+                markBtn.setText("Mark Complete");
+                completedCount--;
+            } else {
+                markBtn.setText("Mark Incomplete");
+                completedCount++;
+            }
+            updateStatus();
+        });
+
+        hbox.getChildren().addAll(nameLabel, markBtn);
+        return hbox;
     }
 
     private void updateStatus() {
@@ -60,6 +109,10 @@ public class DashboardController {
     private void setupCalendar(LocalDate date) {
         calendarGrid.getChildren().clear();
 
+        // Update month/year label
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+        monthYearLabel.setText(date.format(formatter));
+
         YearMonth yearMonth = YearMonth.from(date);
         int daysInMonth = yearMonth.lengthOfMonth();
 
@@ -68,6 +121,8 @@ public class DashboardController {
         for (int i = 0; i < days.length; i++) {
             Label lbl = new Label(days[i]);
             lbl.getStyleClass().add("calendar-header");
+            lbl.setMaxWidth(Double.MAX_VALUE);
+            lbl.setAlignment(Pos.CENTER);
             calendarGrid.add(lbl, i, 0);
         }
 
@@ -80,7 +135,6 @@ public class DashboardController {
 
         for (int day = 1; day <= daysInMonth; day++) {
             StackPane dayCell = createDayCell(day, date);
-
             calendarGrid.add(dayCell, col, row);
 
             col++;
@@ -102,7 +156,6 @@ public class DashboardController {
         // Highlight today
         if (cellDate.equals(LocalDate.now())) {
             cell.getStyleClass().add("today-cell");
-            dayText.getStyleClass().add("today-text");
         }
 
         GridPane.setFillWidth(cell, true);
@@ -115,44 +168,28 @@ public class DashboardController {
         return cell;
     }
 
-    /**
-     * Custom ListCell for habits: shows habit name + Mark Completed button
-     */
-    private class HabitCell extends ListCell<String> {
-        private HBox hbox = new HBox(10);
-        private Label habitLabel = new Label();
-        private Button completeBtn = new Button("Mark Completed");
-        private boolean completed = false;
-
-        HabitCell() {
-            hbox.getChildren().addAll(habitLabel, completeBtn);
-
-            completeBtn.setOnAction(e -> {
-                if (!completed) {
-                    completed = true;
-                    habitLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-                    completeBtn.setDisable(true);
-                    completedCount++;
-                    updateStatus();
-                }
-            });
-        }
-
-        @Override
-        protected void updateItem(String habit, boolean empty) {
-            super.updateItem(habit, empty);
-
-            if (empty || habit == null) {
-                setText(null);
-                setGraphic(null);
-            } else {
-                habitLabel.setText(habit);
-                setGraphic(hbox);
-            }
-        }
+    @FXML
+    private void handlePrevMonth() {
+        currentDate = currentDate.minusMonths(1);
+        setupCalendar(currentDate);
     }
 
-    // ---------------- Existing Handlers ----------------
+    @FXML
+    private void handleNextMonth() {
+        currentDate = currentDate.plusMonths(1);
+        setupCalendar(currentDate);
+    }
+
+    @FXML
+    private void handleLogout() {
+        System.out.println("Logout clicked");
+        // TODO: Implement logout functionality
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Logout");
+        alert.setHeaderText(null);
+        alert.setContentText("Logging out...");
+        alert.showAndWait();
+    }
 
     @FXML
     private void handleAdd() {
@@ -166,7 +203,7 @@ public class DashboardController {
             String trimmed = habit.trim();
             if (!trimmed.isEmpty() && !habits.contains(trimmed)) {
                 habits.add(trimmed);
-                HabitList.getItems().add(trimmed);
+                refreshHabitsList();
                 updateStatus();
                 System.out.println("Added habit: " + trimmed);
             }
@@ -176,7 +213,7 @@ public class DashboardController {
     @FXML
     private void handleEdit() {
         if (habits.isEmpty()) {
-            System.out.println("No habits to edit");
+            showAlert("No Habits", "No habits available to edit.");
             return;
         }
 
@@ -199,7 +236,7 @@ public class DashboardController {
                 if (!trimmedNewName.isEmpty() && !habits.contains(trimmedNewName)) {
                     int index = habits.indexOf(habitToEdit);
                     habits.set(index, trimmedNewName);
-                    HabitList.getItems().set(index, trimmedNewName);
+                    refreshHabitsList();
                     updateStatus();
                     System.out.println("Edited habit: " + habitToEdit + " to " + trimmedNewName);
                 }
@@ -210,7 +247,7 @@ public class DashboardController {
     @FXML
     private void handleDelete() {
         if (habits.isEmpty()) {
-            System.out.println("No habits to delete");
+            showAlert("No Habits", "No habits available to delete.");
             return;
         }
 
@@ -222,15 +259,17 @@ public class DashboardController {
         Optional<String> habitToDelete = dialog.showAndWait();
         habitToDelete.ifPresent(habit -> {
             habits.remove(habit);
-            HabitList.getItems().remove(habit);
+            refreshHabitsList();
             updateStatus();
             System.out.println("Deleted habit: " + habit);
         });
     }
 
-    @FXML
-    private void handleAnalytics(){
-        System.out.println("Transfer to Analytics");
-        //TODO: transfer the user to the analytics page
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

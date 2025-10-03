@@ -1,69 +1,393 @@
-/* Root background */
+/* Root styling - Dark Navy Blue */
 .root {
-    -fx-background-color: linear-gradient(to bottom right, #6a11cb, #2575fc);
-    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #0a1929;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Calendar container */
-#calendarGrid {
-    -fx-background-color: white;
-    -fx-padding: 20;
-    -fx-hgap: 12;
-    -fx-vgap: 12;
-    -fx-border-color: #ddd;
-    -fx-border-radius: 12;
-    -fx-background-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.1, 0, 4);
+/* BorderPane styling */
+.border-pane {
+    -fx-background-color: #0a1929;
 }
 
-/* Calendar headers (Sun, Mon...) */
-.calendar-header {
+/* Top navigation bar with month selector */
+.top-nav {
+    -fx-background-color: #0f2332;
+    -fx-padding: 15 20 15 20;
+    -fx-border-color: #1a3a52;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Month navigation buttons */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-background-radius: 6;
+    -fx-border-color: #2d4a5f;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-padding: 8 20 8 20;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: #1a3a52;
+    -fx-border-color: #3d5a6f;
+}
+
+/* Month/Year label */
+.month-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 30 8 30;
+}
+
+/* Logout button */
+#logoutBtn {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10 30 10 30;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #444;
-    -fx-alignment: center;
-}
-
-/* Day cells */
-.day-cell {
-    -fx-background-color: #f9f9f9;
-    -fx-border-color: #e0e0e0;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-alignment: center;
     -fx-cursor: hand;
-    -fx-pref-width: 80;
-    -fx-pref-height: 70;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0.1, 0, 2);
-    -fx-font-size: 13px;
+    -fx-border-color: #dc2626;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
 }
 
-/* Hover effect */
-.day-cell:hover {
-    -fx-background-color: #eef3ff;
-    -fx-border-color: #2575fc;
+#logoutBtn:hover {
+    -fx-background-color: #dc2626;
 }
 
-/* Weekend cells */
-.weekend-cell {
-    -fx-background-color: #faf3f3;
+#logoutBtn:pressed {
+    -fx-background-color: #b91c1c;
 }
 
-/* Today */
-.today-cell {
-    -fx-background-color: linear-gradient(to bottom right, #6a11cb, #2575fc);
-    -fx-text-fill: white;
+/* Main content area */
+.content-container {
+    -fx-background-color: #0a1929;
+    -fx-padding: 30;
+    -fx-spacing: 30;
+}
+
+/* Left sidebar - Your Habits section */
+.habits-sidebar {
+    -fx-background-color: #2d4a65;
+    -fx-background-radius: 12;
+    -fx-padding: 25;
+    -fx-border-color: #3d5f7f;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-min-width: 380;
+    -fx-max-width: 380;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 3);
+}
+
+.habits-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
+    -fx-padding: 0 0 20 0;
+}
+
+/* Habit list items */
+.habit-item {
+    -fx-background-color: #5a7a95;
+    -fx-background-radius: 10;
+    -fx-padding: 15 18 15 18;
+    -fx-spacing: 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-color: #6a8aa5;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+/* Completed habit item */
+.habit-item-completed {
+    -fx-background-color: #d4edda;
+    -fx-border-color: #28a745;
+    -fx-border-width: 2;
+}
+
+.habit-name {
+    -fx-text-fill: #e8eef5;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+}
+
+/* Completed habit name */
+.habit-name-completed {
+    -fx-text-fill: #155724;
+    -fx-font-weight: bold;
+}
+
+.habit-button {
+    -fx-background-color: #3d5366;
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 8;
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-border-color: #4d6376;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+.habit-button:hover {
+    -fx-background-color: #4d6376;
+}
+
+/* Completed habit button */
+.habit-button-completed {
+    -fx-background-color: #28a745;
+    -fx-border-color: #1e7e34;
+}
+
+.habit-button-completed:hover {
+    -fx-background-color: #218838;
+}
+
+/* Calendar section */
+.calendar-section {
+    -fx-background-color: #1e3a52;
+    -fx-background-radius: 12;
+    -fx-padding: 30;
+    -fx-border-color: #2d5a7f;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 3);
+}
+
+/* Calendar Grid */
+.calendar-root {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+/* Calendar header days (Mon, Tue, etc.) */
+.calendar-header {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+    -fx-padding: 10;
+}
+
+/* Calendar day cells */
+.day-cell {
+    -fx-background-color: #2a4a65;
+    -fx-border-color: #3d5f7f;
+    -fx-border-width: 2;
+    -fx-alignment: center;
+    -fx-padding: 18;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-min-width: 70;
+    -fx-min-height: 70;
+    -fx-max-width: 70;
+    -fx-max-height: 70;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 2);
+}
+
+.day-cell:hover {
+    -fx-background-color: #3d6080;
+    -fx-border-color: #5a8bc4;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(90, 139, 196, 0.4), 8, 0, 0, 3);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.day-cell .text {
+    -fx-fill: #d4a574;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.day-cell:hover .text {
+    -fx-fill: #ffffff;
+}
+
+/* Today's cell - Green highlight */
+.today-cell {
+    -fx-background-color: #10b981;
+    -fx-border-color: #059669;
+    -fx-border-width: 2;
+}
+
+.today-cell .text {
+    -fx-fill: #ffffff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* Empty cells (not in current month) */
+.empty-cell {
+    -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
 
-/* Habit completion states */
-.day-complete {
-    -fx-background-color: #b6f2b0; /* green */
+.empty-cell .text {
+    -fx-fill: #4d6a7f;
 }
-.day-partial {
-    -fx-background-color: #fff6a3; /* yellow */
+
+/* Bottom section - Progress and buttons */
+.bottom-section {
+    -fx-background-color: #1e3a52;
+    -fx-background-radius: 12;
+    -fx-padding: 25;
+    -fx-spacing: 20;
+    -fx-alignment: CENTER;
+    -fx-border-color: #2d5a7f;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 3);
 }
-.day-none {
-    -fx-background-color: #f0f0f0; /* gray */
+
+.progress-label {
+    -fx-text-fill: #4fc3f7;
+    -fx-font-size: 17px;
+    -fx-font-weight: 600;
+    -fx-padding: 5;
+}
+
+/* Action buttons container */
+.button-container {
+    -fx-spacing: 15;
+    -fx-alignment: CENTER;
+}
+
+/* Add button - Blue */
+#addBtn {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 12 35 12 35;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+}
+
+#addBtn:hover {
+    -fx-background-color: #2563eb;
+}
+
+#addBtn:pressed {
+    -fx-background-color: #1d4ed8;
+}
+
+/* Edit button - Yellow */
+#editBtn {
+    -fx-background-color: #fbbf24;
+    -fx-text-fill: #000000;
+    -fx-background-radius: 8;
+    -fx-padding: 12 35 12 35;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-border-color: #f59e0b;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+}
+
+#editBtn:hover {
+    -fx-background-color: #f59e0b;
+}
+
+#editBtn:pressed {
+    -fx-background-color: #d97706;
+}
+
+/* Delete button - Red */
+#deleteBtn {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 12 35 12 35;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-border-color: #dc2626;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+}
+
+#deleteBtn:hover {
+    -fx-background-color: #dc2626;
+}
+
+#deleteBtn:pressed {
+    -fx-background-color: #b91c1c;
+}
+
+/* Analytics button - Keep if needed */
+#analyticsBtn {
+    -fx-background-color: #10b981;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 12 35 12 35;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-border-color: #059669;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+}
+
+#analyticsBtn:hover {
+    -fx-background-color: #059669;
+}
+
+#analyticsBtn:pressed {
+    -fx-background-color: #047857;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 14px;
+}
+
+/* Status label */
+#statusLabel {
+    -fx-text-fill: #00bfff;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+
+/* Scrollbars */
+.scroll-bar {
+    -fx-background-color: #1a3a52;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #4d6a7f;
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #5d7a8f;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* HBox containers */
+.hbox {
+    -fx-background-color: transparent;
+}
+
+/* VBox containers */
+.vbox {
+    -fx-background-color: transparent;
 }

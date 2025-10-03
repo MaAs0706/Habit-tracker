@@ -8,66 +8,74 @@
             stylesheets="@dashboard.css"
             fx:controller="org.habittracker.controllers.DashboardController">
 
+    <!-- Top Navigation Bar with Month Selector and Logout -->
     <top>
-        <HBox spacing="10" alignment="CENTER" BorderPane.alignment="CENTER">
+        <HBox spacing="20" alignment="CENTER" styleClass="top-nav">
             <children>
-                <Button text="Add Habit" fx:id="addBtn" onAction="#handleAdd"/>
-                <Button text="Edit Habit" fx:id="editBtn" onAction="#handleEdit"/>
-                <Button text="Delete Habit" fx:id="deleteBtn" onAction="#handleDelete"/>
-                <Button text="Analytics" fx:id="analyticsBtn" onAction="#handleAnalytics" />
+                <!-- Month Navigation -->
+                <HBox spacing="15" alignment="CENTER" HBox.hgrow="ALWAYS">
+                    <Button fx:id="prevMonthBtn" text="(" styleClass="nav-button" onAction="#handlePrevMonth"/>
+                    <Label fx:id="monthYearLabel" text="September 2025" styleClass="month-label"/>
+                    <Button fx:id="nextMonthBtn" text=")" styleClass="nav-button" onAction="#handleNextMonth"/>
+                </HBox>
+
+                <!-- Logout Button -->
+                <Button fx:id="logoutBtn" text="Logout" onAction="#handleLogout"/>
             </children>
-            <padding>
-                <Insets top="10" bottom="10" left="10" right="10"/>
-            </padding>
         </HBox>
     </top>
 
-    <left>
-        <VBox spacing="10">
-            <children>
-                <Label text="Your Habits" style="-fx-font-weight:bold;"/>
-                <ListView fx:id="HabitList" prefWidth="200"/>
-            </children>
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-        </VBox>
-    </left>
-
+    <!-- Main Content Area -->
     <center>
-        <GridPane fx:id="calendarGrid" hgap="10" vgap="10" BorderPane.alignment="CENTER"
-                  maxWidth="Infinity" maxHeight="Infinity"
-                  styleClass="calendar-root">
-            <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
-                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
-                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
-                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
-                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
-                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
-                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints vgrow="ALWAYS"/>
-                <RowConstraints vgrow="ALWAYS"/>
-                <RowConstraints vgrow="ALWAYS"/>
-                <RowConstraints vgrow="ALWAYS"/>
-                <RowConstraints vgrow="ALWAYS"/>
-                <RowConstraints vgrow="ALWAYS"/>
-            </rowConstraints>
-        </GridPane>
-    </center>
+        <HBox spacing="30" styleClass="content-container">
 
+            <!-- Calendar Section (Left/Center) -->
+            <VBox spacing="20" HBox.hgrow="ALWAYS">
+                <children>
+                    <!-- Calendar Grid -->
+                    <VBox styleClass="calendar-section" VBox.vgrow="ALWAYS">
+                        <children>
+                            <GridPane fx:id="calendarGrid" styleClass="calendar-root">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="14.28"/>
+                                </columnConstraints>
+                            </GridPane>
+                        </children>
+                    </VBox>
 
-    <bottom>
-        <HBox  fx:id="display"   alignment="CENTER" BorderPane.alignment="CENTER">
-            <children>
-                <Label fx:id="statusLabel" text="Today's Progress: 0/0 habits completed"/>
-            </children>
-            <padding>
-                <Insets top="10" bottom="10" left="10" right="10"/>
-            </padding>
+                    <!-- Bottom Progress and Buttons -->
+                    <VBox styleClass="bottom-section">
+                        <children>
+                            <Label fx:id="statusLabel" text="Today's Progress: 2/2 habits completed" styleClass="progress-label"/>
+
+                            <HBox spacing="15" alignment="CENTER" styleClass="button-container">
+                                <Button text="+ Add Habit" fx:id="addBtn" onAction="#handleAdd"/>
+                                <Button text="Edit" fx:id="editBtn" onAction="#handleEdit"/>
+                                <Button text="Delete" fx:id="deleteBtn" onAction="#handleDelete"/>
+                            </HBox>
+                        </children>
+                    </VBox>
+                </children>
+            </VBox>
+
+            <!-- Right Sidebar - Your Habits -->
+            <VBox styleClass="habits-sidebar" spacing="15">
+                <children>
+                    <Label text="Your Habits" styleClass="habits-title"/>
+
+                    <VBox fx:id="habitsContainer" spacing="10">
+                        <!-- Habit items will be added dynamically -->
+                    </VBox>
+                </children>
+            </VBox>
+
         </HBox>
-    </bottom>
+    </center>
 
 </BorderPane>
