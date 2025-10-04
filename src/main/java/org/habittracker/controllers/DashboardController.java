@@ -20,7 +20,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DashboardController {
-
+    @FXML
+    private Button logoutBtn ;
     @FXML
     private Label monthYearLabel;
     @FXML
@@ -216,10 +217,7 @@ public class DashboardController {
         refreshCalendarView();
     }
 
-    @FXML
-    private void handleLogout() {
 
-    }
 
     @FXML
     private void handleAdd() {
@@ -313,6 +311,20 @@ public class DashboardController {
                 System.out.println("Failed to delete habit from database.");
             }
         });
+    }
+    @FXML
+    private void handleLogout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/habittracker/login.fxml"));;
+            Parent loginRoot = loader.load();
+
+            Scene scene = new Scene(loginRoot);
+            Stage stage = (Stage) logoutBtn.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("Login");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
