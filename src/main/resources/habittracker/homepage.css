@@ -1,7 +1,9 @@
+/* Root Background */
 .root {
     -fx-background-color: linear-gradient(to bottom right, #1a1a2e, #16213e);
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
     -fx-padding: 0;
+    -fx-overflow: hidden; /* prevent scrollbars for snow */
 }
 
 /* Header Buttons */
@@ -90,4 +92,11 @@
     -fx-background-color: linear-gradient(to right, #3a2fba, #2d5a91);
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
+}
+
+/* Snowflakes */
+.snowflake {
+    -fx-fill: white;
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.6), 4, 0, 0, 0);
 }
