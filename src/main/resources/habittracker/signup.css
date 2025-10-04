@@ -1,59 +1,87 @@
+/* Root Background */
 .root {
-    -fx-background-color: linear-gradient(to bottom right, #6a11cb, #2575fc);
-    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: linear-gradient(to bottom right, #1a1a2e, #16213e);
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
 }
 
-/* Card container */
+/* Signup Container (VBox) */
 .signup-container {
-    -fx-background-color: white;
-    -fx-background-radius: 15;
-    -fx-padding: 25;
-    -fx-spacing: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0, 0, 6);
-    -fx-max-height: 400;
-
-    -fx-max-width: 400; /* prevents stretching */
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+    -fx-padding: 20px;
+    -fx-pref-width: 350px;
+    -fx-max-width: 350px;
+    -fx-min-width: 350px;
+    -fx-pref-height: 400px;
+    -fx-max-height: 400px;
+    -fx-min-height: 400px;
+    -fx-background-color: rgba(30, 30, 46, 0.95);
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 0, 6);
+    -fx-border-color: linear-gradient(to right, #6c63ff, #4a90e2);
+    -fx-border-width: 1px;
+    -fx-border-radius: 15px;
 }
 
-/* Title */
+/* Title Label */
 .title {
-    -fx-font-size: 20px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #333;
+    -fx-text-fill: linear-gradient(to right, #6c63ff, #4a90e2);
+    -fx-padding: 0 0 10 0;
 }
 
-/* Input fields */
+/* Input Fields (TextField and PasswordField) */
 .input-field {
-    -fx-pref-width: 240;
-    -fx-padding: 10;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-border-color: #ccc;
-}
-
-/* Button */
-.primary-btn {
-    -fx-background-color: #2575fc;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
+    -fx-min-width: 200px;
+    -fx-padding: 6px 8px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #2a2a3e;
+    -fx-border-width: 1;
+    -fx-background-color: #1e1e2e;
     -fx-text-fill: white;
+    -fx-prompt-text-fill: #6c757d;
+    -fx-focus-color: #6c63ff;
+    -fx-faint-focus-color: #6c63ff22;
+    -fx-font-size: 13px;
+}
+
+.input-field:focused {
+    -fx-border-color: #6c63ff;
+    -fx-background-color: #252536;
+}
+
+/* Signup Button */
+.primary-btn {
+    -fx-background-color: linear-gradient(to right, #6c63ff, #4a90e2);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-background-radius: 8;
-    -fx-pref-width: 240;
-    -fx-padding: 10;
-}
-.primary-btn:hover {
-    -fx-background-color: #1a5ed8;
-}
-
-/* Message label */
-.message-label {
-    -fx-font-size: 12px;
-    -fx-text-fill: red;
-}
-
-/* Link (for navigation to login) */
-.link-text {
-    -fx-text-fill: #2575fc;
-    -fx-font-size: 12px;
-    -fx-underline: true;
+    -fx-background-radius: 20px;
     -fx-cursor: hand;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
+    -fx-min-width: 200px;
+    -fx-padding: 6px;
+    -fx-effect: dropshadow(gaussian, rgba(108, 99, 255, 0.3), 10, 0, 0, 4);
+}
+
+.primary-btn:hover {
+    -fx-background-color: linear-gradient(to right, #5548d9, #357ABD);
+    -fx-effect: dropshadow(gaussian, rgba(108, 99, 255, 0.5), 12, 0, 0, 6);
+}
+
+.primary-btn:pressed {
+    -fx-background-color: linear-gradient(to right, #3a2fba, #2d5a91);
+}
+
+/* Message Label */
+.message-label {
+    -fx-font-size: 11px;
+    -fx-padding: 5px 0 0 0;
+    -fx-text-fill: #ff6b6b;
+    -fx-font-weight: bold;
 }

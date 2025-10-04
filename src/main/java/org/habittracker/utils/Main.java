@@ -13,7 +13,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Correct path to load the FXML file from the 'resources/habittracker' folder
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/habittracker/analytics.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/habittracker/homepage.fxml"));
         
         Parent root = fxmlLoader.load(); 
         
