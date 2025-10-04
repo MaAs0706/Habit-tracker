@@ -4,19 +4,22 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
+<BorderPane fx:id="rootPane" 
+            styleClass="root"
+            xmlns:fx="http://javafx.com/fxml"
             stylesheets="@login.css"
-            fx:controller="org.habittracker.controllers.LoginController">
+            fx:controller="org.habittracker.controllers.LoginController"
+            prefHeight="600.0" prefWidth="800.0">
 
     <center>
-        <VBox>
+        <VBox fx:id="loginContainer" styleClass="login-container">
             <Label text="Welcome Back to " styleClass="title"/>
             <Label text="Habit Tracker" styleClass="title"/>
             <TextField fx:id="usernameField" promptText="Enter Username"/>
             <PasswordField fx:id="passwordField" promptText="Enter Password"/>
 
             <Button text="Login" onAction="#handleLogin"/>
-            <Label fx:id="errorLabel" textFill="#802d67"/>
+            <Label fx:id="errorLabel"/>
         </VBox>
     </center>
 
