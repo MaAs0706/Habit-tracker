@@ -278,3 +278,21 @@
     -fx-font-size: 17px;
     -fx-font-weight: 600;
 }
+
+
+#analyticsBtn {
+    -fx-background-color: #10b981; /* teal/green */
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10 30 10 30;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-border-color: #059669;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+}
+
+#analyticsBtn:hover {
+    -fx-background-color: #059669;
+}

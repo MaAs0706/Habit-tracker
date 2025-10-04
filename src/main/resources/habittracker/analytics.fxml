@@ -19,15 +19,14 @@
     <top>
         <HBox spacing="15" alignment="CENTER_LEFT">
             <children>
-                <Button text="← Back" fx:id="backBtn"/>
+                <Button text="← Back" fx:id="backBtn" onAction="#handleBack"/>
                 <Label text="Analytics Dashboard" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
                 <Pane HBox.hgrow="ALWAYS"/>
                 <Label text="Range:"/>
                 <ComboBox fx:id="rangeSelector" prefWidth="150">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="This Week"/>
-                            <String fx:value="This Month"/>
+
                             <String fx:value="Last 7 Days"/>
                             <String fx:value="Last 30 Days"/>
                         </FXCollections>

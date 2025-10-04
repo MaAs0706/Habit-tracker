@@ -17,7 +17,7 @@
                     <Label fx:id="monthYearLabel" text="October 2025" styleClass="month-label"/>
                     <Button fx:id="nextMonthBtn" text="&gt;" styleClass="nav-button" onAction="#handleNextMonth"/>
                 </HBox>
-
+                <Button fx:id="analyticsBtn" text="Analytics" onAction="#handleAnalytics" />
                 <Button fx:id="logoutBtn" text="Logout" onAction="#handleLogout"/>
             </children>
         </HBox>

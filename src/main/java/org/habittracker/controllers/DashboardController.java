@@ -1,14 +1,19 @@
 package org.habittracker.controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import javafx.stage.Stage;
 import org.habittracker.db.HabitDAO;
 import org.habittracker.models.Habit;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -312,7 +317,16 @@ public class DashboardController {
 
     @FXML
     private void handleAnalytics() {
-        System.out.println("Transfer to Analytics");
-        // TODO: Implement analytics page transfer
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/habittracker/analytics.fxml"));
+            Parent analyticsRoot = loader.load();
+
+            Scene scene = new Scene(analyticsRoot);
+            Stage stage = (Stage) monthYearLabel.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("Habit Analytics");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

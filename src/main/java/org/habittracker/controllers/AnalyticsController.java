@@ -1,14 +1,22 @@
 package org.habittracker.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 
+import javafx.stage.Stage;
 import org.habittracker.db.HabitDAO;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Map;
@@ -25,6 +33,9 @@ public class AnalyticsController {
     private ComboBox<String> rangeSelector;
 
     private HabitDAO habitDAO;
+
+    @FXML
+    private Button backButton;
 
     @FXML
     public void initialize() {
@@ -90,6 +101,27 @@ public class AnalyticsController {
         for (Map.Entry<String, Integer> entry : habitCounts.entrySet()) {
             PieChart.Data slice = new PieChart.Data(entry.getKey(), entry.getValue());
             pieChart.getData().add(slice);
+        }
+    }
+
+    @FXML
+    private void handleBack(ActionEvent event) {
+        try {
+            // Load the Dashboard FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/habittracker/dashboard.fxml"));
+            Parent dashboardRoot = loader.load();
+
+            // Get the current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set the new scene
+            Scene scene = new Scene(dashboardRoot);
+            stage.setScene(scene);
+            stage.setTitle("Habit Tracker - Dashboard");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error loading dashboard.fxml");
         }
     }
 }
