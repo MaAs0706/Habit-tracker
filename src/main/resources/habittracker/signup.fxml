@@ -3,38 +3,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="rootPane" styleClass="root" 
-            xmlns="http://javafx.com/javafx" 
+<BorderPane fx:id="rootPane" styleClass="root"
+            xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.habittracker.controllers.SignupController"
             stylesheets="@signup.css"
             prefHeight="600.0" prefWidth="800.0">
-    
+
     <center>
-        <VBox fx:id="signupContainer" styleClass="signup-container" alignment="CENTER">
-            
+        <VBox fx:id="signupContainer" styleClass="signup-container" alignment="CENTER" spacing="10">
+
             <Label text="Sign Up" styleClass="title"/>
-            
-            <TextField fx:id="usernameField" 
-                      styleClass="input-field" 
-                      promptText="Username"/>
-            
-            <PasswordField fx:id="passwordField" 
-                          styleClass="input-field" 
-                          promptText="Password"/>
-            
-            <PasswordField fx:id="confirmPasswordField" 
-                          styleClass="input-field" 
-                          promptText="Confirm Password"/>
-            
-            <Button text="Sign Up" 
-                   styleClass="primary-btn" 
-                   onAction="#handleSignup"/>
-            
-            <Label fx:id="messageLabel" 
-                  styleClass="message-label"
-                  text=""/>
-            
+
+            <TextField fx:id="usernameField" styleClass="input-field" promptText="Username"/>
+
+            <PasswordField fx:id="passwordField" styleClass="input-field" promptText="Password"/>
+
+            <PasswordField fx:id="confirmPasswordField" styleClass="input-field" promptText="Confirm Password"/>
+
+            <Button text="Sign Up" styleClass="primary-btn" onAction="#handleSignup"/>
+
+            <Label fx:id="messageLabel" styleClass="message-label" text=""/>
+
+            <!-- Navigation Buttons -->
+            <VBox spacing="20" alignment="CENTER">
+                <Button text="Home" onAction="#goHome" styleClass="primary-btn"/>
+                <Button text="Login" onAction="#goLogin" styleClass="primary-btn"/>
+            </VBox>
+
         </VBox>
     </center>
 

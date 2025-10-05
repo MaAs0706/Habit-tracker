@@ -7,22 +7,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane fx:id="root" alignment="CENTER" stylesheets="@homepage.css"
+<StackPane fx:id="root" alignment="CENTER"
+           stylesheets="@homepage.css"
            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.habittracker.controllers.HomepageController">
-   <HBox alignment="TOP_RIGHT" spacing="15" StackPane.alignment="TOP_RIGHT">
-      <padding>
-         <Insets top="20" right="50"/>
-      </padding>
-      <children>
-         <Button fx:id="loginButton" styleClass="header-button" text="Login"/>
-         <Button fx:id="signupButton" styleClass="header-button" text="Sign Up"/>
-      </children>
-   </HBox>
+
    <!-- Main Content Layer -->
    <VBox alignment="CENTER" spacing="40">
       <!-- Header with Login/Signup Buttons -->
-
+      <HBox alignment="CENTER_RIGHT" spacing="15">
+         <padding>
+            <Insets right="50" top="30"/>
+         </padding>
+         <children>
+            <Button fx:id="loginButton" mnemonicParsing="false" styleClass="header-button" text="Login" />
+            <Button fx:id="signupButton" mnemonicParsing="false" styleClass="header-button" text="Sign Up" />
+         </children>
+      </HBox>
 
       <!-- Main Title -->
       <VBox alignment="CENTER" spacing="10">
