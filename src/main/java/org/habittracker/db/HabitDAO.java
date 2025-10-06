@@ -1,10 +1,13 @@
 package org.habittracker.db;
 
 import org.habittracker.models.Habit;
+import org.habittracker.services.GoogleCalendarService;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class HabitDAO {
     private Connection conn;
@@ -24,7 +27,8 @@ public class HabitDAO {
         String habitTable = """
                 CREATE TABLE IF NOT EXISTS habit (
                     id INT PRIMARY KEY AUTO_INCREMENT,
-                    name VARCHAR(255) NOT NULL
+                    name VARCHAR(255) NOT NULL,
+                    google_event_id VARCHAR(255)  -- 🔹 new column
                 )
                 """;
         String completionTable = """
@@ -46,9 +50,11 @@ public class HabitDAO {
         List<Habit> habits = new ArrayList<>();
         String sql = "SELECT * FROM habit";
         try (Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                habits.add(new Habit(rs.getInt("id"), rs.getString("name"), false));
+                Habit h = new Habit(rs.getInt("id"), rs.getString("name"), false);
+                h.setGoogleEventId(rs.getString("google_event_id")); // 🔹 add this
+                habits.add(h);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,11 +63,31 @@ public class HabitDAO {
     }
 
     public boolean addHabit(Habit habit) {
-        String sql = "INSERT INTO habit (name) VALUES (?)";
+        String sql = "INSERT INTO habit (name, google_event_id) VALUES (?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // 🔹 Step 1: Create Google Calendar event first
+            String eventId = null;
+            try {
+                eventId = GoogleCalendarService.addEvent(
+                        habit.getName(),
+                        "Reminder for habit: " + habit.getName(),
+                        new java.util.Date(), // current time
+                        60 // duration: 60 min
+                );
+            } catch (IOException | GeneralSecurityException e) {
+                e.printStackTrace();
+                System.out.println("⚠️ Failed to create Google Calendar event.");
+            }
+
+            habit.setGoogleEventId(eventId);
+
+            // 🔹 Step 2: Store in database
             stmt.setString(1, habit.getName());
+            stmt.setString(2, eventId);
             int affected = stmt.executeUpdate();
             return affected > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -74,6 +100,21 @@ public class HabitDAO {
             stmt.setString(1, newName);
             stmt.setInt(2, habit.getId());
             int affected = stmt.executeUpdate();
+
+            // 🔹 Update Google Calendar event too
+            if (habit.getGoogleEventId() != null) {
+                try {
+                    GoogleCalendarService.updateEvent(
+                            habit.getGoogleEventId(),
+                            newName,
+                            "Updated habit: " + newName
+                    );
+                } catch (IOException | GeneralSecurityException e) {
+                    e.printStackTrace();
+                    System.out.println("⚠️ Failed to update Google Calendar event.");
+                }
+            }
+
             return affected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,11 +128,23 @@ public class HabitDAO {
         try {
             conn.setAutoCommit(false);
 
+            // 🔹 Delete completions
             try (PreparedStatement stmt = conn.prepareStatement(deleteCompletions)) {
                 stmt.setInt(1, habit.getId());
                 stmt.executeUpdate();
             }
 
+            // 🔹 Delete from Google Calendar
+            if (habit.getGoogleEventId() != null) {
+                try {
+                    GoogleCalendarService.deleteEvent(habit.getGoogleEventId());
+                } catch (IOException | GeneralSecurityException e) {
+                    e.printStackTrace();
+                    System.out.println("⚠️ Failed to delete Google Calendar event.");
+                }
+            }
+
+            // 🔹 Delete from local DB
             int affected;
             try (PreparedStatement stmt = conn.prepareStatement(deleteHabit)) {
                 stmt.setInt(1, habit.getId());
@@ -113,6 +166,9 @@ public class HabitDAO {
         }
     }
 
+    // Existing analytics and markCompleted methods remain unchanged
+    // ⬇️ (no need to modify)
+
     public Map<Integer, Boolean> getCompletionStatusForDay(LocalDate date) {
         Map<Integer, Boolean> status = new HashMap<>();
         String sql = "SELECT habit_id, completed FROM habit_completion WHERE completion_date = ?";
@@ -128,7 +184,7 @@ public class HabitDAO {
         }
         return status;
     }
-    // 1. Daily completion counts (for line chart)
+
     public Map<LocalDate, Integer> getDailyCompletionCounts(LocalDate start, LocalDate end) {
         Map<LocalDate, Integer> counts = new HashMap<>();
         String sql = """
@@ -152,7 +208,6 @@ public class HabitDAO {
         return counts;
     }
 
-    // 2. Habit completion distribution (for pie chart)
     public Map<String, Integer> getHabitCompletionCounts(LocalDate start, LocalDate end) {
         Map<String, Integer> counts = new HashMap<>();
         String sql = """
@@ -174,7 +229,6 @@ public class HabitDAO {
         } catch (SQLException e) { e.printStackTrace(); }
         return counts;
     }
-
 
     public void markCompleted(Habit habit, LocalDate date, boolean completed) {
         String check = "SELECT id FROM habit_completion WHERE habit_id = ? AND completion_date = ?";
